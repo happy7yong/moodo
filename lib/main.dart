@@ -1,7 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moodo/auth_service.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AuthService()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -9,60 +19,181 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: LoginPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+/// 로그인 페이지
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _LoginPageState extends State<LoginPage> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("로그인")),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            /// 현재 유저 로그인 상태
+            const Center(
+              child: Text(
+                "로그인해 주세요 🙂",
+                style: TextStyle(
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            const SizedBox(height: 32),
+
+            /// 이메일
+            TextField(
+              controller: emailController,
+              decoration: const InputDecoration(hintText: "이메일"),
+            ),
+
+            /// 비밀번호
+            TextField(
+              controller: passwordController,
+              obscureText: false, // 비밀번호 안보이게
+              decoration: const InputDecoration(hintText: "비밀번호"),
+            ),
+            const SizedBox(height: 32),
+
+            /// 로그인 버튼
+            ElevatedButton(
+              child: const Text("로그인", style: TextStyle(fontSize: 21)),
+              onPressed: () {
+                // 로그인 성공시 HomePage로 이동
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const HomePage()),
+                );
+              },
+            ),
+
+            /// 회원가입 버튼
+            ElevatedButton(
+              child: const Text("회원가입", style: TextStyle(fontSize: 21)),
+              onPressed: () {
+                // 회원가입
+                print("sign up");
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
+}
+
+/// 홈페이지
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  TextEditingController jobController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: const Text("버킷 리스트"),
+        actions: [
+          TextButton(
+            child: const Text("로그아웃"),
+            onPressed: () {
+              print("sign out");
+              // 로그인 페이지로 이동
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginPage()),
+              );
+            },
+          ),
+        ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+      body: Column(
+        children: [
+          /// 입력창
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              children: [
+                /// 텍스트 입력창
+                Expanded(
+                  child: TextField(
+                    controller: jobController,
+                    decoration: const InputDecoration(
+                      hintText: "하고 싶은 일을 입력해주세요.",
+                    ),
+                  ),
+                ),
+
+                /// 추가 버튼
+                ElevatedButton(
+                  child: const Icon(Icons.add),
+                  onPressed: () {
+                    // create bucket
+                    if (jobController.text.isNotEmpty) {
+                      print("create bucket");
+                    }
+                  },
+                ),
+              ],
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          const Divider(height: 1),
+
+          /// 버킷 리스트
+          Expanded(
+            child: ListView.builder(
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                String job = "$index";
+                bool isDone = false;
+                return ListTile(
+                  title: Text(
+                    job,
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: isDone ? Colors.grey : Colors.black,
+                      decoration: isDone
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                    ),
+                  ),
+                  // 삭제 아이콘 버튼
+                  trailing: IconButton(
+                    icon: const Icon(CupertinoIcons.delete),
+                    onPressed: () {
+                      // 삭제 버튼 클릭시
+                    },
+                  ),
+                  onTap: () {
+                    // 아이템 클릭하여 isDone 업데이트
+                  },
+                );
+              },
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+          ),
+        ],
       ),
     );
   }

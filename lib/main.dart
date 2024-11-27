@@ -1,9 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moodo/firebase_options.dart';
 import 'auth_service.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
     MultiProvider(
       providers: [
@@ -95,8 +101,10 @@ class _LoginPageState extends State<LoginPage> {
                       email: emailController.text,
                       password: passwordController.text,
                       onSuccess: () {
-                        // 회원가입 성공
-                        print("회원가입 성공");
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("회원가입 성공"),
+                        ));
                       },
                       onError: (err) {
                         // 에러 발생

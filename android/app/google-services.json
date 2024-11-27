@@ -1,26 +1,87 @@
 {
   "project_info": {
-    "project_number": "1075796855545",
-    "project_id": "moodo-9fbcb",
-    "storage_bucket": "moodo-9fbcb.firebasestorage.app"
+    "project_number": "1001821509354",
+    "project_id": "fir-demo-9d98a",
+    "storage_bucket": "fir-demo-9d98a.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1075796855545:android:217002c119803e403eb028",
+        "mobilesdk_app_id": "1:1001821509354:android:fd6754c6cdbca5897d6993",
         "android_client_info": {
-          "package_name": "com.example.moodo"
+          "package_name": "com.example.flutter_application_1"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1001821509354-4gaq9dqkrg40454p0r80q7k7dtv37cv9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flutter_application_1",
+            "certificate_hash": "66871b6c0d8bc726669832506132966b185da774"
+          }
+        },
+        {
+          "client_id": "1001821509354-2th5iar1sv984lcb013v1tdrp02i9sn1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyCtOtBwTE4R6LLoIfX8g_SXwQXUeRiZBqY"
+          "current_key": "AIzaSyAg8_cmdUOgzr1xk8Pn4Q6puBMSolA48jk"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1001821509354-2th5iar1sv984lcb013v1tdrp02i9sn1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1001821509354-o5oiiocqudvanakc5rmkn0uk4tqgd4si.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flutterApplication1"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1001821509354:android:8c2ac182733edc8c7d6993",
+        "android_client_info": {
+          "package_name": "com.example.moodo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1001821509354-2th5iar1sv984lcb013v1tdrp02i9sn1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAg8_cmdUOgzr1xk8Pn4Q6puBMSolA48jk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1001821509354-2th5iar1sv984lcb013v1tdrp02i9sn1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1001821509354-o5oiiocqudvanakc5rmkn0uk4tqgd4si.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flutterApplication1"
+              }
+            }
+          ]
         }
       }
     }

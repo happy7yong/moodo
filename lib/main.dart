@@ -40,61 +40,65 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("로그인")),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            /// 현재 유저 로그인 상태
-            const Center(
-              child: Text(
-                "로그인해 주세요 🙂",
-                style: TextStyle(
-                  fontSize: 24,
+    return Consumer<AuthService>(
+      builder: (context, authService, child) {
+        return Scaffold(
+          appBar: AppBar(title: const Text("로그인")),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                /// 현재 유저 로그인 상태
+                const Center(
+                  child: Text(
+                    "로그인해 주세요 🙂",
+                    style: TextStyle(
+                      fontSize: 24,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 32),
+                const SizedBox(height: 32),
 
-            /// 이메일
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(hintText: "이메일"),
-            ),
+                /// 이메일
+                TextField(
+                  controller: emailController,
+                  decoration: const InputDecoration(hintText: "이메일"),
+                ),
 
-            /// 비밀번호
-            TextField(
-              controller: passwordController,
-              obscureText: false, // 비밀번호 안보이게
-              decoration: const InputDecoration(hintText: "비밀번호"),
-            ),
-            const SizedBox(height: 32),
+                /// 비밀번호
+                TextField(
+                  controller: passwordController,
+                  obscureText: false, // 비밀번호 안보이게
+                  decoration: const InputDecoration(hintText: "비밀번호"),
+                ),
+                const SizedBox(height: 32),
 
-            /// 로그인 버튼
-            ElevatedButton(
-              child: const Text("로그인", style: TextStyle(fontSize: 21)),
-              onPressed: () {
-                // 로그인 성공시 HomePage로 이동
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const HomePage()),
-                );
-              },
-            ),
+                /// 로그인 버튼
+                ElevatedButton(
+                  child: const Text("로그인", style: TextStyle(fontSize: 21)),
+                  onPressed: () {
+                    // 로그인 성공시 HomePage로 이동
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (_) => const HomePage()),
+                    );
+                  },
+                ),
 
-            /// 회원가입 버튼
-            ElevatedButton(
-              child: const Text("회원가입", style: TextStyle(fontSize: 21)),
-              onPressed: () {
-                // 회원가입
-                print("sign up");
-              },
+                /// 회원가입 버튼
+                ElevatedButton(
+                  child: const Text("회원가입", style: TextStyle(fontSize: 21)),
+                  onPressed: () {
+                    // 회원가입
+                    print("sign up");
+                  },
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

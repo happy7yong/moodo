@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moodo/auth_service.dart';
+import 'auth_service.dart';
 import 'package:provider/provider.dart';
 
 void main() {

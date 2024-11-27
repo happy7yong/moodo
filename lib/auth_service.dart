@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 class AuthService extends ChangeNotifier {
   User? currentUser() {
+    return null;
+
     // 현재 유저(로그인 되지 않은 경우 null 반환)
   }
 
@@ -13,6 +15,15 @@ class AuthService extends ChangeNotifier {
     required Function(String err) onError, // 에러 발생시 호출되는 함수
   }) async {
     // 회원가입
+
+    // 이메일 및 비밀번호 입력 여부 확인 [유효성 검사사]
+    if (email.isEmpty) {
+      onError("이메일을 입력해 주세요.");
+      return;
+    } else if (password.isEmpty) {
+      onError("비밀번호를 입력해 주세요.");
+      return;
+    }
   }
 
   void signIn({

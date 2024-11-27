@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 
 class AuthService extends ChangeNotifier {
   User? currentUser() {
-    return null;
-
+    return FirebaseAuth.instance.currentUser;
     // 현재 유저(로그인 되지 않은 경우 null 반환)
   }
 

@@ -100,7 +100,9 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       onError: (err) {
                         // 에러 발생
-                        print("회원가입 실패 : $err");
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(err),
+                        ));
                       },
                     );
                   },

@@ -64,7 +64,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1001821509354',
     projectId: 'fir-demo-9d98a',
     storageBucket: 'fir-demo-9d98a.firebasestorage.app',
-    androidClientId: '1001821509354-4gaq9dqkrg40454p0r80q7k7dtv37cv9.apps.googleusercontent.com',
+    androidClientId:
+        '1001821509354-4gaq9dqkrg40454p0r80q7k7dtv37cv9.apps.googleusercontent.com',
     iosBundleId: 'com.example.moodo',
   );
 
@@ -74,7 +75,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1001821509354',
     projectId: 'fir-demo-9d98a',
     storageBucket: 'fir-demo-9d98a.firebasestorage.app',
-    androidClientId: '1001821509354-4gaq9dqkrg40454p0r80q7k7dtv37cv9.apps.googleusercontent.com',
+    androidClientId:
+        '1001821509354-4gaq9dqkrg40454p0r80q7k7dtv37cv9.apps.googleusercontent.com',
     iosBundleId: 'com.example.moodo',
   );
 

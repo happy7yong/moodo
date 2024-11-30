@@ -2,9 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moodo/firebase_options.dart';
 import 'auth_service.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +31,9 @@ class MyApp extends StatelessWidget {
     final user = context.read<AuthService>().currentUser();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: 'leeseoyun',
+      ),
       home: user == null ? const LoginPage() : const HomePage(),
     );
   }
@@ -247,42 +252,162 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   TextEditingController jobController = TextEditingController();
+  final String _currentDate = '';
+  int? _currentMonth;
+  bool _isHovered = false;
+
+//처음 시작할때 로딩
+  @override
+  void initState() {
+    super.initState();
+    _fetchCurrentMonth(); // 월 값을 가져오는 함수 호출
+  }
+
+//현재 달력 가져오기
+  void _fetchCurrentMonth() {
+    DateTime now = DateTime.now();
+    _currentMonth = now.month; // 현재 월 값을 저장
+  }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthService>(builder: (context, authService, child) {
       User? user = authService.currentUser();
       return Scaffold(
-        backgroundColor: const Color.fromRGBO(251, 250, 248, 1),
-        appBar: AppBar(
           backgroundColor: const Color.fromRGBO(251, 250, 248, 1),
-          title: const Text("버킷 리스트"),
-          actions: [
-            TextButton(
-              child: const Text("로그아웃"),
-              onPressed: () {
-                context.read<AuthService>().signOut();
-                // 로그인 페이지로 이동
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
-                );
+          appBar: AppBar(
+            backgroundColor: const Color.fromRGBO(251, 250, 248, 1),
+            leading: IconButton(
+                onPressed: () {
+                  context.read<AuthService>().signOut();
+                  // 로그인 페이지로 이동
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                },
+                icon: const Icon(
+                  Icons.logout_rounded,
+                )),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: IconButton(
+                  icon: const Icon(Icons.calendar_today_rounded,
+                      color: Colors.black),
+                  onPressed: () {},
+                ),
+              ),
+            ],
+          ),
+          body: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(35.0),
+              child: Column(
+                children: [
+                  const SizedBox(height: 40),
+                  Text(
+                    '${_currentMonth?.toString().padLeft(2, '0') ?? '로딩 중'}월',
+                    style: const TextStyle(fontSize: 26),
+                  ),
+
+                  const SizedBox(height: 70), // Text와 Row 사이의 간격 추가
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      for (var day in ['일', '월', '화', '수', '목', '금', '토'])
+                        SizedBox(
+                          width: 40,
+                          child: Center(
+                            child: Text(
+                              day,
+                              style: const TextStyle(
+                                  fontSize: 23,
+                                  color: Color.fromRGBO(96, 96, 96, 1)),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 20), // Row와 GridView 사이의 간격 추가
+                  Expanded(
+                    child: CalendarGrid(currentMonth: _currentMonth),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.only(bottom: 30.0, right: 10),
+            child: MouseRegion(
+              onEnter: (_) {
+                setState(() {
+                  _isHovered = true; // 마우스가 버튼 위에 있을 때
+                });
               },
+              onExit: (_) {
+                setState(() {
+                  _isHovered = false; // 마우스가 버튼을 떠날 때
+                });
+              },
+              child: SizedBox(
+                width: 60,
+                height: 60,
+                child: FloatingActionButton(
+                  onPressed: () {},
+                  elevation: _isHovered ? 0 : 0,
+                  backgroundColor: const Color.fromRGBO(53, 47, 47, 1),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50)),
+                ),
+              ),
             ),
-          ],
-        ),
-        body: Column(
-          children: [
-            /// 입력창
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Row(children: [
-                Text("${user?.email}", style: const TextStyle(fontSize: 16)),
-              ]),
-            ),
-          ],
-        ),
-      );
+          ));
     });
+  }
+}
+
+class CalendarGrid extends StatelessWidget {
+  final int? currentMonth;
+
+  const CalendarGrid({super.key, this.currentMonth});
+
+  @override
+  Widget build(BuildContext context) {
+    final now = DateTime.now();
+    final firstDayOfMonth = DateTime(now.year, currentMonth ?? now.month, 1);
+    final lastDayOfMonth = DateTime(now.year, currentMonth! + 1, 0);
+    final daysInMonth = lastDayOfMonth.day;
+
+    final startWeekday = firstDayOfMonth.weekday % 7; // 0(일요일) ~ 6(토요일)
+
+    const totalCells = 7 * 5; // 7열 5행
+    final calendarDays = List<String?>.filled(totalCells, null);
+
+    // 날짜를 채우기
+    for (int day = 1; day <= daysInMonth; day++) {
+      calendarDays[startWeekday + day - 1] = day.toString();
+    }
+
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 7, // 7열
+        childAspectRatio: 1.0, // 정사각형 형태
+      ),
+      itemCount: totalCells,
+      itemBuilder: (context, index) {
+        return Container(
+          margin: const EdgeInsets.all(4.0),
+          child: Center(
+            child: Text(
+              calendarDays[index] ?? '',
+              style: const TextStyle(
+                fontSize: 18,
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

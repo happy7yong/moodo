@@ -77,7 +77,26 @@ class Diarypage extends StatelessWidget {
               ),
             ),
             ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        backgroundColor: const Color.fromRGBO(251, 250, 248, 1),
+                        title: const Text('모달제목'),
+                        content: const Text('안녕하세요'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('닫기'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromRGBO(53, 47, 47, 1),
                     shape: RoundedRectangleBorder(

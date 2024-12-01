@@ -26,6 +26,7 @@ class Diarypage extends StatelessWidget {
             const SizedBox(height: 10),
             Container(
               width: 300,
+              height: 70,
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -33,14 +34,15 @@ class Diarypage extends StatelessWidget {
                       color: const Color.fromRGBO(255, 221, 173, 1), width: 1),
                   borderRadius: BorderRadius.circular(15)),
               child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     '오늘의 일기를 모두 기록하면',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18, height: 1.1),
                   ),
                   Text(
                     '오늘의 감정 이모티콘이 생겨요!',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18, height: 1.1),
                   ),
                 ],
               ),
@@ -82,22 +84,68 @@ class Diarypage extends StatelessWidget {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        backgroundColor: const Color.fromRGBO(251, 250, 248, 1),
-                        title: const Text('모달제목'),
-                        content: Column(
-                          children: [
-                            const Text('안녕하세요'),
-                            Image.asset(
-                              '',
-                            )
-                          ],
+                        backgroundColor: Colors.white,
+                        content: SizedBox(
+                          width: MediaQuery.of(context).size.width *
+                              0.8, // 화면 너비의 80% 차지
+                          height: 250,
+                          child: Column(
+                            mainAxisAlignment:
+                                MainAxisAlignment.center, // 가로 중앙 정렬
+                            children: [
+                              const SizedBox(
+                                height: 14,
+                              ),
+                              Image.asset(
+                                'assets/images/diaryIcon.png',
+                                width: 130,
+                                height: 130,
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Text(
+                                '오늘의 기록을 모두 작성하셨나요?',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              const SizedBox(
+                                height: 13,
+                              ),
+                              const SizedBox(
+                                width: 300,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      '현재 작성된 일기를 기반으로',
+                                      style: TextStyle(fontSize: 17, height: 1),
+                                    ),
+                                    Text(
+                                      '감정 이모티콘을 추천해드릴게요!',
+                                      style: TextStyle(fontSize: 17, height: 1),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                         actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text('닫기'),
+                          Center(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      const Color.fromRGBO(255, 186, 101, 1),
+                                  elevation: 0,
+                                  minimumSize: const Size(140, 50)),
+                              child: const Text(
+                                '감정 받기',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                            ),
                           ),
                         ],
                       );

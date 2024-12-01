@@ -65,6 +65,7 @@ flutter:
     - assets/images/Calendar.png
     - assets/images/diaryIcon.png
     - assets/images/defaultMood.png
+    - assets/images/flowerpot.png
   fonts:
     - family: leeseoyun
       fonts:

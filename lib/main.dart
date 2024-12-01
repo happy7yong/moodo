@@ -8,6 +8,8 @@ import 'auth_service.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
+import 'diaryPage.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -322,7 +324,7 @@ class _HomePageState extends State<HomePage> {
                             child: Text(
                               day,
                               style: const TextStyle(
-                                  fontSize: 23,
+                                  fontSize: 20,
                                   color: Color.fromRGBO(96, 96, 96, 1)),
                             ),
                           ),
@@ -354,11 +356,21 @@ class _HomePageState extends State<HomePage> {
                 width: 60,
                 height: 60,
                 child: FloatingActionButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Diarypage()),
+                    );
+                  },
                   elevation: _isHovered ? 0 : 0,
                   backgroundColor: const Color.fromRGBO(53, 47, 47, 1),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50)),
+                  child: const Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
@@ -402,7 +414,7 @@ class CalendarGrid extends StatelessWidget {
             child: Text(
               calendarDays[index] ?? '',
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 17,
               ),
             ),
           ),

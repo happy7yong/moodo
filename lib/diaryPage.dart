@@ -84,7 +84,14 @@ class Diarypage extends StatelessWidget {
                       return AlertDialog(
                         backgroundColor: const Color.fromRGBO(251, 250, 248, 1),
                         title: const Text('모달제목'),
-                        content: const Text('안녕하세요'),
+                        content: Column(
+                          children: [
+                            const Text('안녕하세요'),
+                            Image.asset(
+                              '',
+                            )
+                          ],
+                        ),
                         actions: [
                           TextButton(
                             onPressed: () {

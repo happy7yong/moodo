@@ -75,6 +75,7 @@ class Diarypage extends StatelessWidget {
                           color: Color.fromRGBO(212, 212, 212, 1),
                           fontSize: 18),
                       border: InputBorder.none),
+                  maxLines: null, // 여러 줄 입력을 허용
                 ),
               ),
             ),

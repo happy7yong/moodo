@@ -63,6 +63,8 @@ flutter:
     - assets/images/moodo-logo.png
     - assets/images/logout.svg
     - assets/images/Calendar.png
+    - assets/images/defaultMood.svg
+    - assets/images/defaultMood.png
   fonts:
     - family: leeseoyun
       fonts:

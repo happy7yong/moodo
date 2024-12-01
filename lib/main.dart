@@ -306,8 +306,11 @@ class _HomePageState extends State<HomePage> {
             child: Padding(
               padding: const EdgeInsets.all(35.0),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 40),
+                  const SizedBox(
+                    height: 30,
+                  ),
                   Text(
                     '${_currentMonth?.toString().padLeft(2, '0') ?? '로딩 중'}월',
                     style: const TextStyle(fontSize: 26),
@@ -357,7 +360,7 @@ class _HomePageState extends State<HomePage> {
                 height: 60,
                 child: FloatingActionButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const Diarypage()),

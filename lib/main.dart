@@ -444,26 +444,43 @@ class CalendarGrid extends StatelessWidget {
         final isFuture = day != null && int.parse(day) > now.day;
 
         return Container(
-          margin: const EdgeInsets.all(4.0),
-          decoration: BoxDecoration(
-            color: isToday ? const Color.fromRGBO(255, 240, 223, 1) : null,
-            borderRadius: BorderRadius.circular(40.0),
-          ),
-          child: Center(
-            child: Text(
-              day ?? '',
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
-                color: isToday
-                    ? const Color.fromRGBO(255, 169, 49, 1)
-                    : isPast
-                        ? Colors.black
-                        : Colors.grey,
-              ),
+            margin: const EdgeInsets.all(4.0),
+            decoration: BoxDecoration(
+              color: isToday ? const Color.fromRGBO(255, 240, 223, 1) : null,
+              borderRadius: BorderRadius.circular(40.0),
             ),
-          ),
-        );
+            child: Center(
+              child: SizedBox(
+                width: 100,
+                height: 100,
+                child: TextButton(
+                  onPressed: isFuture
+                      ? null
+                      : () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Diarypage()),
+                          );
+                        },
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.transparent, // 기본 배경색을 투명으로 설정
+                  ),
+                  child: Text(
+                    day ?? '',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
+                      color: isToday
+                          ? const Color.fromRGBO(255, 169, 49, 1)
+                          : isPast
+                              ? Colors.black
+                              : Colors.grey,
+                    ),
+                  ),
+                ),
+              ),
+            ));
       },
     );
   }

@@ -374,10 +374,14 @@ class _HomePageState extends State<HomePage> {
                 height: 60,
                 child: FloatingActionButton(
                   onPressed: () {
+                    final today = DateTime.now();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const Diarypage()),
+                        builder: (context) => Diarypage(
+                          selectedDate: today,
+                        ),
+                      ),
                     );
                   },
                   elevation: 0,
@@ -413,16 +417,16 @@ class CalendarGrid extends StatelessWidget {
       (currentMonth ?? now.month) + 1,
       0,
     );
-    final daysInMonth = lastDayOfMonth.day;
+    final daysInMonth = lastDayOfMonth.day; //월에 포함된 총 날짜 수
 
     final startWeekday = firstDayOfMonth.weekday % 7; // 0(일요일) ~ 6(토요일)
 
     const totalCells = 7 * 5; // 7열 5행
-    final calendarDays = List<String?>.filled(totalCells, null);
+    final calendarDays = List<int?>.filled(totalCells, null);
 
     // 날짜를 채우기
     for (int day = 1; day <= daysInMonth; day++) {
-      calendarDays[startWeekday + day - 1] = day.toString();
+      calendarDays[startWeekday + day - 1] = day;
     }
 
     return GridView.builder(
@@ -433,54 +437,63 @@ class CalendarGrid extends StatelessWidget {
       itemCount: totalCells,
       itemBuilder: (context, index) {
         final day = calendarDays[index];
-        //오늘
+        // 오늘
         final isToday = day != null &&
             now.year == firstDayOfMonth.year &&
             now.month == firstDayOfMonth.month &&
-            int.parse(day) == now.day;
-        //과거 오늘 이전
-        final isPast = day != null && int.parse(day) < now.day;
-        //미래 오늘 이후
-        final isFuture = day != null && int.parse(day) > now.day;
+            day == now.day;
+        // 과거 오늘 이전
+        final isPast = day != null && day < now.day;
+        // 미래 오늘 이후
+        final isFuture = day != null && day > now.day;
 
         return Container(
-            margin: const EdgeInsets.all(4.0),
-            decoration: BoxDecoration(
-              color: isToday ? const Color.fromRGBO(255, 240, 223, 1) : null,
-              borderRadius: BorderRadius.circular(40.0),
-            ),
-            child: Center(
-              child: SizedBox(
-                width: 100,
-                height: 100,
-                child: TextButton(
-                  onPressed: isFuture
-                      ? null
-                      : () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Diarypage()),
-                          );
-                        },
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.transparent, // 기본 배경색을 투명으로 설정
-                  ),
-                  child: Text(
-                    day ?? '',
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
-                      color: isToday
-                          ? const Color.fromRGBO(255, 169, 49, 1)
-                          : isPast
-                              ? Colors.black
-                              : Colors.grey,
-                    ),
+          margin: const EdgeInsets.all(4.0),
+          decoration: BoxDecoration(
+            color: isToday ? const Color.fromRGBO(255, 240, 223, 1) : null,
+            borderRadius: BorderRadius.circular(40.0),
+          ),
+          child: Center(
+            child: SizedBox(
+              width: 100,
+              height: 100,
+              child: TextButton(
+                onPressed: isFuture
+                    ? null
+                    : () {
+                        final selectedDate = DateTime(
+                          firstDayOfMonth.year,
+                          firstDayOfMonth.month,
+                          day!,
+                        );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Diarypage(
+                              selectedDate: selectedDate,
+                            ),
+                          ),
+                        );
+                      },
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.transparent, // 기본 배경색을 투명으로 설정
+                ),
+                child: Text(
+                  day?.toString() ?? '',
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
+                    color: isToday
+                        ? const Color.fromRGBO(255, 169, 49, 1)
+                        : isPast
+                            ? Colors.black
+                            : Colors.grey,
                   ),
                 ),
               ),
-            ));
+            ),
+          ),
+        );
       },
     );
   }

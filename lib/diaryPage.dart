@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Diarypage extends StatelessWidget {
-  const Diarypage({super.key});
+  final DateTime selectedDate;
+
+  const Diarypage({
+    super.key,
+    required this.selectedDate,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -48,15 +53,17 @@ class Diarypage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 15),
-            const Center(
+            Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('2024.11.13', style: TextStyle(fontSize: 18)),
-                  SizedBox(
+                  Text(
+                      "${selectedDate.year}년 ${selectedDate.month}월 ${selectedDate.day}일",
+                      style: const TextStyle(fontSize: 18)),
+                  const SizedBox(
                     width: 10,
                   ),
-                  Text(
+                  const Text(
                     '수요일',
                     style: TextStyle(
                       fontSize: 18,
@@ -87,12 +94,10 @@ class Diarypage extends StatelessWidget {
                       return AlertDialog(
                         backgroundColor: Colors.white,
                         content: SizedBox(
-                          width: MediaQuery.of(context).size.width *
-                              0.8, // 화면 너비의 80% 차지
+                          width: MediaQuery.of(context).size.width * 0.8,
                           height: 250,
                           child: Column(
-                            mainAxisAlignment:
-                                MainAxisAlignment.center, // 가로 중앙 정렬
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const SizedBox(
                                 height: 14,

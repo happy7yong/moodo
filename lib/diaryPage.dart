@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moodo/auth_service.dart';
 import 'package:moodo/diary_service.dart';
@@ -84,16 +85,39 @@ class Diarypage extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: TextField(
-                      controller: DiaryCollection,
-                      decoration: const InputDecoration(
-                          hintText: "오늘은 어떤 하루를 보내셨나요?",
-                          hintStyle: TextStyle(
-                              color: Color.fromRGBO(212, 212, 212, 1),
-                              fontSize: 18),
-                          border: InputBorder.none),
-                      maxLines: null,
-                    ),
+                    child: FutureBuilder<QuerySnapshot>(
+                        future: DiaryService.read(user.uid),
+                        builder: (context, snapshot) {
+                          final documents =
+                              snapshot.data?.docs ?? []; //문서들 가져오기
+                          String initialText = '';
+
+                          // 문서에서 오늘의 날짜와 일치하는 데이터 가져오기
+                          final todayString =
+                              "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
+
+                          for (var doc in documents) {
+                            final data = doc.data() as Map<String, dynamic>;
+                            if (data['date'] == todayString) {
+                              initialText = data['content'] ?? '';
+                              break;
+                            }
+                          }
+
+                          // 컨트롤러 값 설정
+                          DiaryCollection.text = initialText;
+
+                          return TextField(
+                            controller: DiaryCollection,
+                            decoration: const InputDecoration(
+                                hintText: "오늘은 어떤 하루를 보내셨나요?",
+                                hintStyle: TextStyle(
+                                    color: Color.fromRGBO(212, 212, 212, 1),
+                                    fontSize: 18),
+                                border: InputBorder.none),
+                            maxLines: null,
+                          );
+                        }),
                   ),
                 ),
                 ElevatedButton(

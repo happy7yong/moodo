@@ -6,7 +6,7 @@ class DiaryService extends ChangeNotifier {
 
   Future<QuerySnapshot> read(String uid) async {
     // 내 bucketList 가져오기
-    throw UnimplementedError(); // return 값 미구현 에러
+    return DiaryCollection.where('uid', isEqualTo: uid).get();
   }
 
   void create(String date, String uid, String content) async {

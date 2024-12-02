@@ -58,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final authService = context.read<AuthService>();
-    final user = authService.currentUser()!;
+    final user = authService.currentUser(); //뒤에 !를 붙이면 로그인 화면에서 오류가 나요.
     return Consumer<AuthService>(
       builder: (context, authService, child) {
         User? user = authService.currentUser();

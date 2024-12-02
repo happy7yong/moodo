@@ -5,7 +5,7 @@ class DiaryService extends ChangeNotifier {
   final DiaryCollection = FirebaseFirestore.instance.collection('Diary');
 
   Future<QuerySnapshot> read(String uid) async {
-    // 내 bucketList 가져오기
+    // 내 uid에 맞는 bucketList 가져오기
     return DiaryCollection.where('uid', isEqualTo: uid).get();
   }
 

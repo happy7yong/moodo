@@ -256,7 +256,7 @@ class _HomePageState extends State<HomePage> {
   TextEditingController jobController = TextEditingController();
   final String _currentDate = '';
   int? _currentMonth;
-  bool _isHovered = false;
+  final bool _isHovered = false;
 
 //처음 시작할때 로딩
   @override
@@ -276,85 +276,99 @@ class _HomePageState extends State<HomePage> {
     return Consumer<AuthService>(builder: (context, authService, child) {
       User? user = authService.currentUser();
       return Scaffold(
+        backgroundColor: const Color.fromRGBO(251, 250, 248, 1),
+        appBar: AppBar(
           backgroundColor: const Color.fromRGBO(251, 250, 248, 1),
-          appBar: AppBar(
-            backgroundColor: const Color.fromRGBO(251, 250, 248, 1),
-            leading: IconButton(
-                onPressed: () {
-                  context.read<AuthService>().signOut();
-                  // 로그인 페이지로 이동
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  );
-                },
-                icon: const Icon(
-                  Icons.logout_rounded,
-                )),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: IconButton(
-                  icon: const Icon(Icons.calendar_today_rounded,
-                      color: Colors.black),
-                  onPressed: () {},
-                ),
-              ),
-            ],
-          ),
-          body: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(35.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Text(
-                    '${_currentMonth?.toString().padLeft(2, '0') ?? '로딩 중'}월',
-                    style: const TextStyle(fontSize: 26),
-                  ),
-
-                  const SizedBox(height: 70), // Text와 Row 사이의 간격 추가
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      for (var day in ['일', '월', '화', '수', '목', '금', '토'])
-                        SizedBox(
-                          width: 40,
-                          child: Center(
-                            child: Text(
-                              day,
-                              style: const TextStyle(
-                                  fontSize: 20,
-                                  color: Color.fromRGBO(96, 96, 96, 1)),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 20), // Row와 GridView 사이의 간격 추가
-                  Expanded(
-                    child: CalendarGrid(currentMonth: _currentMonth),
-                  ),
-                ],
+          leading: IconButton(
+              onPressed: () {
+                context.read<AuthService>().signOut();
+                // 로그인 페이지로 이동
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                );
+              },
+              icon: const Icon(
+                Icons.logout_rounded,
+              )),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                icon: const Icon(Icons.calendar_today_rounded,
+                    color: Colors.black),
+                onPressed: () {},
               ),
             ),
+          ],
+        ),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(35.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  height: 30,
+                ),
+                Text(
+                  '${_currentMonth?.toString().padLeft(2, '0') ?? '로딩 중'}월',
+                  style: const TextStyle(fontSize: 26),
+                ),
+
+                const SizedBox(height: 70), // Text와 Row 사이의 간격 추가
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    for (var day in ['일', '월', '화', '수', '목', '금', '토'])
+                      SizedBox(
+                        width: 40,
+                        child: Center(
+                          child: Text(
+                            day,
+                            style: const TextStyle(
+                                fontSize: 20,
+                                color: Color.fromRGBO(96, 96, 96, 1)),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 20), // Row와 GridView 사이의 간격 추가
+                Expanded(
+                  child: CalendarGrid(currentMonth: _currentMonth),
+                ),
+              ],
+            ),
           ),
-          floatingActionButton: Padding(
-            padding: const EdgeInsets.only(bottom: 30.0, right: 10),
-            child: MouseRegion(
-              onEnter: (_) {
-                setState(() {
-                  _isHovered = true; // 마우스가 버튼 위에 있을 때
-                });
-              },
-              onExit: (_) {
-                setState(() {
-                  _isHovered = false; // 마우스가 버튼을 떠날 때
-                });
-              },
+        ),
+        floatingActionButton: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            Positioned(
+              bottom: 30.0,
+              left: 50.0,
+              child: SizedBox(
+                width: 80,
+                height: 80,
+                child: FloatingActionButton(
+                    onPressed: () {},
+                    elevation: 0,
+                    highlightElevation: 0,
+                    backgroundColor: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: Image.asset(
+                      'assets/images/flowerpot.png',
+                      width: 100,
+                      height: 100,
+                    )),
+              ),
+            ),
+            Positioned(
+              bottom: 30.0,
+              right: 30.0,
               child: SizedBox(
                 width: 60,
                 height: 60,
@@ -366,10 +380,11 @@ class _HomePageState extends State<HomePage> {
                           builder: (context) => const Diarypage()),
                     );
                   },
-                  elevation: _isHovered ? 0 : 0,
+                  elevation: 0,
                   backgroundColor: const Color.fromRGBO(53, 47, 47, 1),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50)),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
                   child: const Icon(
                     Icons.edit,
                     color: Colors.white,
@@ -377,7 +392,9 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-          ));
+          ],
+        ),
+      );
     });
   }
 }
@@ -391,7 +408,11 @@ class CalendarGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final now = DateTime.now();
     final firstDayOfMonth = DateTime(now.year, currentMonth ?? now.month, 1);
-    final lastDayOfMonth = DateTime(now.year, currentMonth! + 1, 0);
+    final lastDayOfMonth = DateTime(
+      now.year,
+      (currentMonth ?? now.month) + 1,
+      0,
+    );
     final daysInMonth = lastDayOfMonth.day;
 
     final startWeekday = firstDayOfMonth.weekday % 7; // 0(일요일) ~ 6(토요일)
@@ -411,13 +432,34 @@ class CalendarGrid extends StatelessWidget {
       ),
       itemCount: totalCells,
       itemBuilder: (context, index) {
+        final day = calendarDays[index];
+        //오늘
+        final isToday = day != null &&
+            now.year == firstDayOfMonth.year &&
+            now.month == firstDayOfMonth.month &&
+            int.parse(day) == now.day;
+        //과거 오늘 이전
+        final isPast = day != null && int.parse(day) < now.day;
+        //미래 오늘 이후
+        final isFuture = day != null && int.parse(day) > now.day;
+
         return Container(
           margin: const EdgeInsets.all(4.0),
+          decoration: BoxDecoration(
+            color: isToday ? const Color.fromRGBO(255, 240, 223, 1) : null,
+            borderRadius: BorderRadius.circular(40.0),
+          ),
           child: Center(
             child: Text(
-              calendarDays[index] ?? '',
-              style: const TextStyle(
+              day ?? '',
+              style: TextStyle(
                 fontSize: 17,
+                fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
+                color: isToday
+                    ? const Color.fromRGBO(255, 169, 49, 1)
+                    : isPast
+                        ? Colors.black
+                        : Colors.grey,
               ),
             ),
           ),

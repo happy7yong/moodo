@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:moodo/diary_service.dart';
 import 'package:moodo/firebase_options.dart';
 import 'auth_service.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AuthService()),
+        ChangeNotifierProvider(create: (context) => DiaryService()),
       ],
       child: const MyApp(),
     ),
@@ -55,6 +57,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = context.read<AuthService>();
+    final user = authService.currentUser()!;
     return Consumer<AuthService>(
       builder: (context, authService, child) {
         User? user = authService.currentUser();

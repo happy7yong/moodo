@@ -9,6 +9,7 @@ class DiaryService extends ChangeNotifier {
     return DiaryCollection.where('uid', isEqualTo: uid).get();
   }
 
+  //생성
   void create(String date, String uid, String content) async {
     await DiaryCollection.add({
       'date': date,
@@ -17,11 +18,15 @@ class DiaryService extends ChangeNotifier {
     });
   }
 
-  void update(String docId, bool isDone) async {
-    // bucket isDone 업데이트
+  //수정
+  void update(String docId, String date, String uid, String content) async {
+    await DiaryCollection.doc(docId).update({
+      'content': content,
+    });
+    notifyListeners();
   }
 
-  void delete(String docId) async {
+  void delete(String date, String uid, String content) async {
     // bucket 삭제
   }
 }

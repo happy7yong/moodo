@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 class Diarypage extends StatelessWidget {
   TextEditingController DiaryCollection = TextEditingController();
   final DateTime selectedDate;
+  bool isEditing = false; // 기록 수정 여부
+  String? selectedDocId;
 
   Diarypage({
     super.key,
@@ -122,6 +124,15 @@ class Diarypage extends StatelessWidget {
                 ),
                 ElevatedButton(
                     onPressed: () {
+                      final formattedDate =
+                          "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
+                      if (isEditing) {
+                        DiaryService.update(selectedDocId!, formattedDate,
+                            user.uid, DiaryCollection.text);
+                      } else {
+                        DiaryService.create(
+                            formattedDate, user.uid, DiaryCollection.text);
+                      }
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -177,11 +188,6 @@ class Diarypage extends StatelessWidget {
                                   onPressed: () {
                                     final formattedDate =
                                         "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
-                                    DiaryService.create(
-                                      formattedDate,
-                                      user.uid,
-                                      DiaryCollection.text,
-                                    );
                                     Navigator.of(context).pop();
                                   },
                                   style: ElevatedButton.styleFrom(

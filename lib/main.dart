@@ -73,9 +73,9 @@ class _LoginPageState extends State<LoginPage> {
                   /// 현재 유저 로그인 상태
                   Center(
                     child: Image.asset(
-                      'assets/images/moodo-logo.png', // 이미지 경로
-                      width: 120, // 이미지의 너비
-                      height: 120, // 이미지의 높이
+                      'assets/images/moodo-logo.png',
+                      width: 120,
+                      height: 120,
                     ),
                   ),
 

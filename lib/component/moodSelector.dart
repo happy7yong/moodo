@@ -6,8 +6,6 @@ class MoodSelector extends StatelessWidget {
 
   const MoodSelector({super.key, required this.onMoodSelected});
 
-  void _showMoodSelector(BuildContext context) {}
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(

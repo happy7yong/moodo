@@ -308,7 +308,7 @@ class _HomePageState extends State<HomePage> {
         ),
         body: Center(
           child: Padding(
-            padding: const EdgeInsets.all(35.0),
+            padding: const EdgeInsets.all(30.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -355,14 +355,10 @@ class _HomePageState extends State<HomePage> {
               child: SizedBox(
                 width: 80,
                 height: 80,
-                child: FloatingActionButton(
-                    onPressed: () {},
-                    elevation: 0,
-                    highlightElevation: 0,
-                    backgroundColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
+                child: GestureDetector(
+                    onTap: () {
+                      print("화분이 클릭되었습니다!");
+                    },
                     child: Image.asset(
                       'assets/images/flowerpot.png',
                       width: 100,
@@ -485,7 +481,7 @@ class CalendarGrid extends StatelessWidget {
                 child: Text(
                   day?.toString() ?? '',
                   style: TextStyle(
-                    fontSize: 17,
+                    fontSize: 15,
                     fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
                     color: isToday
                         ? const Color.fromRGBO(255, 169, 49, 1)

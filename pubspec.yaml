@@ -33,6 +33,8 @@ dependencies:
   flutter_svg: ^1.0.3
   http: ^1.2.2
   intl: ^0.18.1
+  pytorch_mobile: ^0.2.2
+  #C:\Users\user\AppData\Local\Pub\Cache\hosted\pub.dev\
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -60,12 +62,17 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
+    - assets/sentiment_model_torchscript.pt
     - assets/images/moodo-logo.png
     - assets/images/logout.svg
     - assets/images/Calendar.png
     - assets/images/diaryIcon.png
-    - assets/images/defaultMood.png
     - assets/images/flowerpot.png
+    - assets/images/moodEmoji/defaultMood.png
+    - assets/images/moodEmoji/negativeMood.png
+    - assets/images/moodEmoji/positiveMood.png
+    - assets/images/moodEmoji/neutralityMood.png
+    - assets/images/
   fonts:
     - family: leeseoyun
       fonts:

@@ -10,11 +10,12 @@ class DiaryService extends ChangeNotifier {
   }
 
   //생성
-  void create(String date, String uid, String content) async {
+  void create(String date, String uid, String? content, String? mood) async {
     await DiaryCollection.add({
       'date': date,
       'content': content,
       'uid': uid,
+      'mood': mood,
     });
   }
 

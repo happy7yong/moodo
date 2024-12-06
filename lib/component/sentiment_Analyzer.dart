@@ -1,34 +1,30 @@
-import 'package:pytorch_mobile/enums/dtype.dart';
-import 'package:pytorch_mobile/pytorch_mobile.dart';
-import 'package:pytorch_mobile/model.dart';
+import 'package:dart_sentiment/dart_sentiment.dart';
+import 'package:translator/translator.dart'; // 번역을 위한 패키지
 
-class SentimentAnalyzer {
-  late Model _model;
+Future<String> analyzeKoreanSentiment(String koreanText) async {
+  final translator = GoogleTranslator();
+  final Sentiment sentiment = Sentiment();
 
-  Future<void> loadModel() async {
-    try {
-      _model = await PyTorchMobile.loadModel(
-          'assets/sentiment_model_torchscript.pt');
-    } catch (e) {
-      print("Error loading model: $e");
-    }
+  // 한국어를 영어로 번역
+  final translation = await translator.translate(koreanText, to: 'en');
+
+  // 번역된 텍스트 분석
+  final analysis = sentiment.analysis(translation.text);
+
+  print('원문: $koreanText');
+  print('번역: ${translation.text}');
+  print('감정 분석 결과: $analysis');
+
+  // 감정 점수에 따라 키워드 결정
+  String sentimentKeyword;
+  if (analysis['score'] >= 1) {
+    sentimentKeyword = 'positive';
+  } else if (analysis['score'] <= -1) {
+    sentimentKeyword = 'negative';
+  } else {
+    sentimentKeyword = 'neutral'; // 점수가 1 미만, -1 초과인 경우
   }
 
-  Future<String> analyzeSentiment(String text) async {
-    // 여기에 텍스트를 모델 입력 형식으로 변환하는 로직 구현
-    List<double> inputData = [/* 변환된 데이터 */];
-    List<int> inputShape = [/* 입력 데이터의 shape */];
-
-    final result =
-        await _model.getPrediction(inputData, inputShape, DType.float32);
-
-    // 결과 해석 (모델 출력에 따라 조정 필요)
-    if (result?[0] > 0.66) {
-      return "긍정";
-    } else if (result?[0] > 0.33) {
-      return "중립";
-    } else {
-      return "부정";
-    }
-  }
+  print('키워드: $sentimentKeyword');
+  return sentimentKeyword; // 키워드 반환
 }

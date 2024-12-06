@@ -448,8 +448,9 @@ class CalendarGrid extends StatelessWidget {
 
     return Consumer<DiaryService>(
       builder: (context, DiaryService, child) {
-        return FutureBuilder<QuerySnapshot>(
-          future: DiaryService.read(user.uid),
+        // StreamBuilder로 실시간 업데이트 처리
+        return StreamBuilder<QuerySnapshot>(
+          stream: DiaryService.stream(user.uid), // DiaryService에서 실시간 스트림 제공
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -458,6 +459,7 @@ class CalendarGrid extends StatelessWidget {
             final documents = snapshot.data?.docs ?? [];
             final Map<int, String> fetchedMoodData = {};
 
+            // 문서에서 감정 데이터 가져오기
             for (var doc in documents) {
               final data = doc.data() as Map<String, dynamic>;
               final date = data['date']?.split('-');
@@ -522,14 +524,14 @@ class CalendarGrid extends StatelessWidget {
                               ),
                               child: Center(
                                 child: mood != null
-                                    //감정 이미지 크기
+                                    // 감정 이미지 크기
                                     ? Image.asset(
-                                        moodImages[mood]!,
+                                        moodImages[mood]!, // 감정 이미지 표시
                                         width: 140,
                                         height: 140,
                                       )
                                     : Text(
-                                        //캘린더 날짜 (일) 문자 크기
+                                        // 날짜 표시
                                         day?.toString() ?? '',
                                         style: TextStyle(
                                           fontSize: 15,

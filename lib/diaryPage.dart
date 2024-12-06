@@ -60,28 +60,47 @@ class _DiarypageState extends State<Diarypage> {
           body: Center(
             child: Column(
               children: [
-                GestureDetector(
-                  onTap: () {
-                    print('버튼이 클릭되었습니다!');
+                FutureBuilder<QuerySnapshot>(
+                    future: DiaryService.read(user.uid),
+                    builder: (context, snapshot) {
+                      final documents = snapshot.data?.docs ?? []; // 문서들 가져오기
+                      final todayString =
+                          "${widget.selectedDate.year}-${widget.selectedDate.month}-${widget.selectedDate.day}";
 
-                    showModalBottomSheet(
-                        backgroundColor: const Color.fromRGBO(251, 250, 248, 1),
-                        context: context,
-                        builder: (BuildContext context) {
-                          return MoodSelector(onMoodSelected: (moodEmoji) {
-                            setState(() {
-                              _selectedMood = moodEmoji; //선택한 이미지로 상태 업데이트
-                            });
-                            Navigator.pop(context); // 모달 닫기
-                          });
-                        });
-                  },
-                  child: Image.asset(
-                    moodImages[_selectedMood]!,
-                    width: 90,
-                    height: 90,
-                  ),
-                ),
+                      // 오늘 날짜의 mood 초기화
+                      for (var doc in documents) {
+                        final data = doc.data() as Map<String, dynamic>;
+                        if (data['date'] == todayString) {
+                          _selectedMood = data['mood'] ?? 'default';
+                          break;
+                        }
+                      }
+                      return GestureDetector(
+                        onTap: () {
+                          print('버튼이 클릭되었습니다!');
+
+                          showModalBottomSheet(
+                              backgroundColor:
+                                  const Color.fromRGBO(251, 250, 248, 1),
+                              context: context,
+                              builder: (BuildContext context) {
+                                return MoodSelector(
+                                    onMoodSelected: (moodEmoji) {
+                                  setState(() {
+                                    _selectedMood =
+                                        moodEmoji; //선택한 이미지로 상태 업데이트
+                                  });
+                                  Navigator.pop(context); // 모달 닫기
+                                });
+                              });
+                        },
+                        child: Image.asset(
+                          moodImages[_selectedMood]!,
+                          width: 90,
+                          height: 90,
+                        ),
+                      );
+                    }),
                 Text(
                   sentiment,
                   style: const TextStyle(
@@ -235,7 +254,7 @@ class _DiarypageState extends State<Diarypage> {
                                   final formattedDate =
                                       "${widget.selectedDate.year}-${widget.selectedDate.month}-${widget.selectedDate.day}";
                                   DiaryService.create(formattedDate, user.uid,
-                                      DiaryCollection.text);
+                                      DiaryCollection.text, sentimentKeyword);
 
                                   Navigator.of(context).pop();
                                 },

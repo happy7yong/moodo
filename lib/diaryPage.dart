@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moodo/auth_service.dart';
+import 'package:moodo/component/moodSelector.dart';
 import 'package:moodo/diary_service.dart';
-import 'package:moodo/moodSelector.dart';
-import 'package:moodo/sentiment_Analyzer.dart';
-import 'package:provider/provider.dart';
 import 'moodSelector.dart';
+import 'package:provider/provider.dart';
 
 class Diarypage extends StatefulWidget {
   final DateTime selectedDate;
@@ -21,7 +20,6 @@ class Diarypage extends StatefulWidget {
 
 class _DiarypageState extends State<Diarypage> {
   final TextEditingController DiaryCollection = TextEditingController();
-  final SentimentAnalyzer analyzer = SentimentAnalyzer();
   String _selectedMood = 'default';
   String sentiment = "";
   String? selectedDocId;
@@ -37,15 +35,6 @@ class _DiarypageState extends State<Diarypage> {
   @override
   void initState() {
     super.initState();
-    analyzer.loadModel();
-  }
-
-  Future<void> _analyzeSentiment() async {
-    String text = DiaryCollection.text;
-    String result = await analyzer.analyzeSentiment(text);
-    setState(() {
-      sentiment = result;
-    });
   }
 
   @override
@@ -228,7 +217,6 @@ class _DiarypageState extends State<Diarypage> {
                             Center(
                               child: ElevatedButton(
                                 onPressed: () {
-                                  _analyzeSentiment;
                                   final formattedDate =
                                       "${widget.selectedDate.year}-${widget.selectedDate.month}-${widget.selectedDate.day}";
                                   DiaryService.create(formattedDate, user.uid,

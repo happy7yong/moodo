@@ -267,7 +267,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _fetchCurrentMonth(); // 월 값을 가져오는 함수 호출
+    _fetchCurrentMonth();
   }
 
 //현재 달력 가져오기
@@ -293,6 +293,7 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (context) => const LoginPage()),
                 );
               },
+              //뒤로가기 아이콘
               icon: const Icon(
                 Icons.logout_rounded,
               )),
@@ -471,7 +472,6 @@ class CalendarGrid extends StatelessWidget {
             return GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 7,
-                childAspectRatio: 1.0,
               ),
               itemCount: totalCells,
               itemBuilder: (context, index) {
@@ -494,8 +494,8 @@ class CalendarGrid extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
-                            width: 100,
-                            height: 100,
+                            width: 50,
+                            height: 50,
                             child: TextButton(
                               onPressed: isFuture
                                   ? null
@@ -522,12 +522,14 @@ class CalendarGrid extends StatelessWidget {
                               ),
                               child: Center(
                                 child: mood != null
+                                    //감정 이미지 크기
                                     ? Image.asset(
                                         moodImages[mood]!,
-                                        width: 30,
-                                        height: 30,
+                                        width: 140,
+                                        height: 140,
                                       )
                                     : Text(
+                                        //캘린더 날짜 (일) 문자 크기
                                         day?.toString() ?? '',
                                         style: TextStyle(
                                           fontSize: 15,

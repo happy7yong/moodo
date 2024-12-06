@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moodo/auth_service.dart';
 import 'package:moodo/component/moodSelector.dart';
+import 'package:moodo/component/sentiment_Analyzer.dart';
 import 'package:moodo/diary_service.dart';
 import 'moodSelector.dart';
 import 'package:provider/provider.dart';
+import 'package:dart_sentiment/dart_sentiment.dart';
 
 class Diarypage extends StatefulWidget {
   final DateTime selectedDate;
@@ -216,7 +218,20 @@ class _DiarypageState extends State<Diarypage> {
                           actions: [
                             Center(
                               child: ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
+                                  // 분석할 텍스트를 정의
+                                  String textToAnalyze = DiaryCollection.text;
+                                  String sentimentKeyword =
+                                      await analyzeKoreanSentiment(
+                                          textToAnalyze);
+
+                                  // 선택된 기분 업데이트
+                                  setState(() {
+                                    _selectedMood =
+                                        sentimentKeyword; // 키워드를 사용하여 상태 업데이트
+                                  });
+                                  // 감정 분석 호출
+                                  //analyzeKoreanSentiment(textToAnalyze);
                                   final formattedDate =
                                       "${widget.selectedDate.year}-${widget.selectedDate.month}-${widget.selectedDate.day}";
                                   DiaryService.create(formattedDate, user.uid,

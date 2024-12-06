@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
@@ -340,7 +341,10 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(height: 20), // Row와 GridView 사이의 간격 추가
                 Expanded(
-                  child: CalendarGrid(currentMonth: _currentMonth),
+                  child: CalendarGrid(
+                    currentMonth: _currentMonth,
+                    moodData: {},
+                  ),
                 ),
               ],
             ),
@@ -405,11 +409,18 @@ class _HomePageState extends State<HomePage> {
 
 class CalendarGrid extends StatelessWidget {
   final int? currentMonth;
+  final Map<int, String> moodData;
 
-  const CalendarGrid({super.key, this.currentMonth});
+  const CalendarGrid({
+    super.key,
+    this.currentMonth,
+    required this.moodData,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final authService = context.read<AuthService>();
+    final user = authService.currentUser()!;
     final now = DateTime.now();
     final firstDayOfMonth = DateTime(now.year, currentMonth ?? now.month, 1);
     final lastDayOfMonth = DateTime(
@@ -417,82 +428,131 @@ class CalendarGrid extends StatelessWidget {
       (currentMonth ?? now.month) + 1,
       0,
     );
-    final daysInMonth = lastDayOfMonth.day; //월에 포함된 총 날짜 수
+    final daysInMonth = lastDayOfMonth.day;
+    final startWeekday = firstDayOfMonth.weekday % 7;
 
-    final startWeekday = firstDayOfMonth.weekday % 7; // 0(일요일) ~ 6(토요일)
-
-    const totalCells = 7 * 5; // 7열 5행
+    const totalCells = 7 * 6; // 6주 보장
     final calendarDays = List<int?>.filled(totalCells, null);
 
-    // 날짜를 채우기
+    final Map<String, String> moodImages = {
+      'positive': 'assets/images/moodEmoji/positiveMood.png',
+      'neutral': 'assets/images/moodEmoji/neutralityMood.png',
+      'negative': 'assets/images/moodEmoji/negativeMood.png',
+      'default': 'assets/images/moodEmoji/defaultMood.png',
+    };
+
     for (int day = 1; day <= daysInMonth; day++) {
       calendarDays[startWeekday + day - 1] = day;
     }
 
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 7, // 7열
-        childAspectRatio: 1.0, // 정사각형 형태
-      ),
-      itemCount: totalCells,
-      itemBuilder: (context, index) {
-        final day = calendarDays[index];
-        // 오늘
-        final isToday = day != null &&
-            now.year == firstDayOfMonth.year &&
-            now.month == firstDayOfMonth.month &&
-            day == now.day;
-        // 과거 오늘 이전
-        final isPast = day != null && day < now.day;
-        // 미래 오늘 이후
-        final isFuture = day != null && day > now.day;
+    return Consumer<DiaryService>(
+      builder: (context, DiaryService, child) {
+        return FutureBuilder<QuerySnapshot>(
+          future: DiaryService.read(user.uid),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-        return Container(
-          margin: const EdgeInsets.all(4.0),
-          decoration: BoxDecoration(
-            color: isToday ? const Color.fromRGBO(255, 240, 223, 1) : null,
-            borderRadius: BorderRadius.circular(40.0),
-          ),
-          child: Center(
-            child: SizedBox(
-              width: 100,
-              height: 100,
-              child: TextButton(
-                onPressed: isFuture
-                    ? null
-                    : () {
-                        final selectedDate = DateTime(
-                          firstDayOfMonth.year,
-                          firstDayOfMonth.month,
-                          day!,
-                        );
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Diarypage(
-                              selectedDate: selectedDate,
+            final documents = snapshot.data?.docs ?? [];
+            final Map<int, String> fetchedMoodData = {};
+
+            for (var doc in documents) {
+              final data = doc.data() as Map<String, dynamic>;
+              final date = data['date']?.split('-');
+              if (date != null && date.length == 3) {
+                final day = int.tryParse(date[2]);
+                if (day != null) {
+                  fetchedMoodData[day] = data['mood'] ?? 'default';
+                }
+              }
+            }
+
+            return GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 7,
+                childAspectRatio: 1.0,
+              ),
+              itemCount: totalCells,
+              itemBuilder: (context, index) {
+                final day = calendarDays[index];
+                final isToday = day != null &&
+                    now.year == firstDayOfMonth.year &&
+                    now.month == firstDayOfMonth.month &&
+                    day == now.day;
+                final isPast = day != null && day < now.day;
+                final isFuture = day != null && day > now.day;
+
+                final mood = day != null ? fetchedMoodData[day] : null;
+
+                return Container(
+                  margin: const EdgeInsets.all(4.0),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 100,
+                            height: 100,
+                            child: TextButton(
+                              onPressed: isFuture
+                                  ? null
+                                  : () {
+                                      final selectedDate = DateTime(
+                                        firstDayOfMonth.year,
+                                        firstDayOfMonth.month,
+                                        day!,
+                                      );
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Diarypage(
+                                            selectedDate: selectedDate,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                              style: TextButton.styleFrom(
+                                backgroundColor: isToday
+                                    ? const Color.fromRGBO(255, 240, 223, 1)
+                                    : null,
+                                shape: const CircleBorder(),
+                              ),
+                              child: Center(
+                                child: mood != null
+                                    ? Image.asset(
+                                        moodImages[mood]!,
+                                        width: 30,
+                                        height: 30,
+                                      )
+                                    : Text(
+                                        day?.toString() ?? '',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: isToday
+                                              ? FontWeight.bold
+                                              : FontWeight.normal,
+                                          color: isToday
+                                              ? const Color.fromRGBO(
+                                                  255, 169, 49, 1)
+                                              : isPast
+                                                  ? Colors.black
+                                                  : Colors.grey,
+                                        ),
+                                      ),
+                              ),
                             ),
                           ),
-                        );
-                      },
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.transparent, // 기본 배경색을 투명으로 설정
-                ),
-                child: Text(
-                  day?.toString() ?? '',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
-                    color: isToday
-                        ? const Color.fromRGBO(255, 169, 49, 1)
-                        : isPast
-                            ? Colors.black
-                            : Colors.grey,
+                        ],
+                      ),
+                    ],
                   ),
-                ),
-              ),
-            ),
-          ),
+                );
+              },
+            );
+          },
         );
       },
     );

@@ -66,7 +66,24 @@ class _DiarypageState extends State<Diarypage> {
                       final documents = snapshot.data?.docs ?? []; // 문서들 가져오기
                       final todayString =
                           "${widget.selectedDate.year}-${widget.selectedDate.month}-${widget.selectedDate.day}";
-
+                      // 날짜별 moodData 맵 생성
+                      final Map<int, String> moodData = {};
+                      final now = DateTime.now();
+                      for (var doc in documents) {
+                        final data = doc.data() as Map<String, dynamic>;
+                        if (data['date'] != null && data['mood'] != null) {
+                          // Firebase에 저장된 날짜를 파싱하여 일(day)만 추출
+                          final dateParts = data['date'].split('-');
+                          if (dateParts.length == 3 &&
+                              int.tryParse(dateParts[0]) == now.year &&
+                              int.tryParse(dateParts[1]) == now.month) {
+                            final day = int.tryParse(dateParts[2]);
+                            if (day != null) {
+                              moodData[day] = data['mood'];
+                            }
+                          }
+                        }
+                      }
                       // 오늘 날짜의 mood 초기화
                       for (var doc in documents) {
                         final data = doc.data() as Map<String, dynamic>;

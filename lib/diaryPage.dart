@@ -50,6 +50,7 @@ class _DiarypageState extends State<Diarypage> {
           backgroundColor: const Color.fromRGBO(251, 250, 248, 1),
           appBar: AppBar(
             backgroundColor: const Color.fromRGBO(251, 250, 248, 1),
+            //뒤로가기 버튼
             leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);

@@ -4,7 +4,6 @@ import 'package:moodo/auth_service.dart';
 import 'package:moodo/component/moodSelector.dart';
 import 'package:moodo/component/sentiment_Analyzer.dart';
 import 'package:moodo/diary_service.dart';
-import 'moodSelector.dart';
 import 'package:provider/provider.dart';
 import 'package:dart_sentiment/dart_sentiment.dart';
 
@@ -25,6 +24,7 @@ class _DiarypageState extends State<Diarypage> {
   String _selectedMood = 'default';
   String sentiment = "";
   String? selectedDocId;
+  Map<int, String> moodData = {};
 
   // 감정과 이미지 파일 연결
   final Map<String, String> moodImages = {
@@ -119,38 +119,57 @@ class _DiarypageState extends State<Diarypage> {
                         ),
                       );
                     }),
-                Text(
-                  sentiment,
-                  style: const TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
                 const SizedBox(height: 10),
-                Container(
-                  width: 300,
-                  height: 70,
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: const Color.fromRGBO(255, 221, 173, 1),
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '오늘의 일기를 모두 기록하면',
-                        style: TextStyle(fontSize: 18, height: 1.1),
+                Column(
+                  children: [
+                    if (_selectedMood == 'positive' ||
+                        _selectedMood == 'neutral' ||
+                        _selectedMood == 'negative')
+                      Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/mentStar',
+                            width: 10,
+                            height: 10,
+                          ),
+                          Text(
+                            _selectedMood == 'positive'
+                                ? '기분 좋은 하루셨군요!'
+                                : _selectedMood == 'neutral'
+                                    ? '평온한 하루는 때때로 가장 특별한 순간이죠.'
+                                    : '힘든 하루를 보내셨군요.',
+                            style: TextStyle(),
+                          ),
+                        ],
                       ),
-                      Text(
-                        '오늘의 감정 이모티콘이 생겨요!',
-                        style: TextStyle(fontSize: 18, height: 1.1),
+                    if (_selectedMood == 'default')
+                      Container(
+                        width: 300,
+                        height: 70,
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(
+                            color: const Color.fromRGBO(255, 221, 173, 1),
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '오늘의 일기를 모두 기록하면',
+                              style: TextStyle(fontSize: 18, height: 1.1),
+                            ),
+                            Text(
+                              '오늘의 감정 이모티콘이 생겨요!',
+                              style: TextStyle(fontSize: 18, height: 1.1),
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
+                  ],
                 ),
                 const SizedBox(height: 15),
                 Center(

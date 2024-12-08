@@ -55,8 +55,8 @@ class DiaryService extends ChangeNotifier {
   }
 
   /// 특정 날짜의 데이터가 있는지 확인하는 메서드
-  Future<bool> hasDiary(String userId, String date) async {
-    final diaryData = await getDiaryByDate(userId, date);
+  Future<bool> hasDiary(String userId, String content) async {
+    final diaryData = await getDiaryByDate(userId, content);
     return diaryData != null;
   }
 }

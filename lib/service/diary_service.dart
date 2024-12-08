@@ -59,4 +59,19 @@ class DiaryService extends ChangeNotifier {
     final diaryData = await getDiaryByDate(userId, content);
     return diaryData != null;
   }
+
+  Stream<QuerySnapshot> streamForMonth(String userId, int year, int month) {
+    final startDate = DateTime(year, month, 1);
+    final endDate = DateTime(year, month + 1, 0);
+
+    return FirebaseFirestore.instance
+        .collection('diaryEntries')
+        .where('userId', isEqualTo: userId)
+        .where('date',
+            isGreaterThanOrEqualTo:
+                startDate.toIso8601String().substring(0, 10))
+        .where('date',
+            isLessThanOrEqualTo: endDate.toIso8601String().substring(0, 10))
+        .snapshots();
+  }
 }

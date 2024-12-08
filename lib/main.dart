@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:moodo/component/flowerPotImage.dart';
 import 'package:moodo/diary_service.dart';
 import 'package:moodo/firebase_options.dart';
 import 'auth_service.dart';
@@ -259,7 +260,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   TextEditingController jobController = TextEditingController();
-  final String _currentDate = '';
+
   int? _currentMonth;
   final bool _isHovered = false;
 
@@ -360,15 +361,9 @@ class _HomePageState extends State<HomePage> {
               child: SizedBox(
                 width: 130,
                 height: 130,
-                child: GestureDetector(
-                    onTap: () {
-                      print("화분이 클릭되었습니다!");
-                    },
-                    child: Image.asset(
-                      'assets/images/pot/default-pot.png',
-                      width: 100,
-                      height: 100,
-                    )),
+                child: FlowerpotImage(
+                  selectedMonth: _currentMonth!,
+                ),
               ),
             ),
             Positioned(
@@ -481,10 +476,22 @@ class CalendarGrid extends StatelessWidget {
                     now.year == firstDayOfMonth.year &&
                     now.month == firstDayOfMonth.month &&
                     day == now.day;
-                final isPast = day != null && day < now.day;
-                final isFuture = day != null && day > now.day;
+
+                //day가 없을 경우 빈 셀 반환
+                if (day == null) {
+                  return Container();
+                }
+
+                final isPast = day < now.day;
+                final isFuture = day > now.day;
 
                 final mood = day != null ? fetchedMoodData[day] : null;
+
+                final selectedDate = DateTime(
+                  firstDayOfMonth.year,
+                  firstDayOfMonth.month,
+                  day,
+                );
 
                 return Container(
                   margin: const EdgeInsets.all(4.0),
@@ -501,11 +508,6 @@ class CalendarGrid extends StatelessWidget {
                               onPressed: isFuture
                                   ? null
                                   : () {
-                                      final selectedDate = DateTime(
-                                        firstDayOfMonth.year,
-                                        firstDayOfMonth.month,
-                                        day!,
-                                      );
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -531,7 +533,7 @@ class CalendarGrid extends StatelessWidget {
                                       )
                                     : Text(
                                         // 날짜 표시
-                                        day?.toString() ?? '',
+                                        day.toString() ?? '',
                                         style: TextStyle(
                                           fontSize: 15,
                                           fontWeight: isToday

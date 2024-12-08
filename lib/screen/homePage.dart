@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                   ],
                 ),
-                const SizedBox(height: 20), // Row와 GridView 사이의 간격 추가
+                const SizedBox(height: 20),
                 Expanded(
                   child: CalendarGrid(
                     currentMonth: _currentMonth,

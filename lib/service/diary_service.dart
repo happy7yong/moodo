@@ -61,17 +61,52 @@ class DiaryService extends ChangeNotifier {
   }
 
   Stream<QuerySnapshot> streamForMonth(String userId, int year, int month) {
-    final startDate = DateTime(year, month, 1);
-    final endDate = DateTime(year, month + 1, 0);
+    final startDate = formatDate("$year-$month-1");
+    final endDate = formatDate("$year-${month + 1}-0");
 
     return FirebaseFirestore.instance
         .collection('diaryEntries')
         .where('userId', isEqualTo: userId)
-        .where('date',
-            isGreaterThanOrEqualTo:
-                startDate.toIso8601String().substring(0, 10))
-        .where('date',
-            isLessThanOrEqualTo: endDate.toIso8601String().substring(0, 10))
+        .where('date', isGreaterThanOrEqualTo: startDate)
+        .where('date', isLessThanOrEqualTo: endDate)
         .snapshots();
+  }
+
+  String formatDate(String date) {
+    final parts = date.split('-');
+    if (parts.length == 3) {
+      return "${parts[0]}-${int.parse(parts[1])}-${int.parse(parts[2])}";
+    }
+    return date;
+  }
+
+  Future<Map<String, bool>> getDiaryExistenceForMonth(
+      String userId, int year, int month) async {
+    final startDate = DateTime(year, month, 1);
+    final endDate = DateTime(year, month + 1, 0);
+
+    Map<String, bool> diaryExistence = {};
+
+    // 해당 월의 모든 날짜에 대해 초기화
+    for (int day = 1; day <= endDate.day; day++) {
+      String dateString = formatDate("$year-$month-$day");
+      diaryExistence[dateString] = false;
+    }
+
+    // Firestore에서 해당 월의 데이터 가져오기
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('diaryEntries')
+        .where('userId', isEqualTo: userId)
+        .where('date', isGreaterThanOrEqualTo: formatDate("$year-$month-1"))
+        .where('date', isLessThanOrEqualTo: formatDate("$year-${month + 1}-0"))
+        .get();
+
+    // 가져온 데이터로 diaryExistence 업데이트
+    for (var doc in snapshot.docs) {
+      String date = doc['date'];
+      diaryExistence[date] = true;
+    }
+
+    return diaryExistence;
   }
 }

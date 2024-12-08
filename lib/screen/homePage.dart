@@ -8,7 +8,7 @@ import 'package:moodo/main.dart';
 import 'package:moodo/screen/diaryPage.dart';
 import 'package:moodo/screen/loginPage.dart';
 import 'package:moodo/service/auth_service.dart';
-import 'package:moodo/service/diary_service.dart';
+
 import 'package:provider/provider.dart';
 
 /// 홈페이지

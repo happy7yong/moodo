@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:moodo/component/MonthSelectorDialog.dart';
 import 'package:moodo/component/flowerPotImage.dart';
 import 'package:moodo/diary_service.dart';
 import 'package:moodo/firebase_options.dart';
@@ -304,7 +305,33 @@ class _HomePageState extends State<HomePage> {
               child: IconButton(
                 icon: const Icon(Icons.calendar_today_rounded,
                     color: Colors.black),
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        backgroundColor: Colors.white,
+                        title: const Text("월 선택"),
+                        content: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: List.generate(12, (index) {
+                              final month = index + 1;
+                              return ListTile(
+                                title: Text("${2024}년 $month월"),
+                                onTap: () {
+                                  Navigator.of(context).pop();
+                                  print("선택된 월: ${2024}년 $month월");
+                                },
+                              );
+                            }),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
             ),
           ],

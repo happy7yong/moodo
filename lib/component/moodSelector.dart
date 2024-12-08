@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moodo/auth_service.dart';
-import 'package:moodo/diary_service.dart';
+import 'package:moodo/service/auth_service.dart';
+
 import 'package:provider/provider.dart';
 
 class MoodSelector extends StatefulWidget {

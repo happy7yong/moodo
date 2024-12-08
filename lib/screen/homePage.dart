@@ -82,7 +82,6 @@ class _HomePageState extends State<HomePage> {
                     },
                   );
                   if (selectedMonth != null) {
-                    // Update the state with the selected month
                     setState(() {
                       _currentMonth = selectedMonth;
                     });

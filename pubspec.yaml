@@ -48,6 +48,7 @@ dependencies:
   dart_sentiment: ^0.0.9
   translator: ^1.0.3+1
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -78,7 +79,7 @@ flutter:
     - assets/images/moodEmoji/neutralityMood.png
     - assets/images/
     - assets/images/flower/flowerRose.png
-    - assets/images/flower/flowerSliver.png
+    - assets/images/flower/flowerSilver.png
     - assets/images/pot/default-pot.png
     - assets/images/pot/pot2.png
     - assets/images/pot/pot3.png

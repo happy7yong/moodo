@@ -65,8 +65,10 @@ class _DiarypageState extends State<Diarypage> {
                     future: DiaryService.read(user.uid),
                     builder: (context, snapshot) {
                       final documents = snapshot.data?.docs ?? []; // 문서들 가져오기
+
                       final todayString =
                           "${widget.selectedDate.year}-${widget.selectedDate.month}-${widget.selectedDate.day}";
+                      String? currentDocId;
                       // 날짜별 moodData 맵 생성
                       final Map<int, String> moodData = {};
                       final now = DateTime.now();
@@ -88,29 +90,51 @@ class _DiarypageState extends State<Diarypage> {
                       // 오늘 날짜의 mood 초기화
                       for (var doc in documents) {
                         final data = doc.data() as Map<String, dynamic>;
+                        if (data['date'] != null && data['mood'] != null) {
+                          // Firebase에 저장된 날짜를 파싱하여 일(day)만 추출
+                          final dateParts = data['date'].split('-');
+                          if (dateParts.length == 3 &&
+                              int.tryParse(dateParts[0]) == now.year &&
+                              int.tryParse(dateParts[1]) == now.month) {
+                            final day = int.tryParse(dateParts[2]);
+                            if (day != null) {
+                              moodData[day] = data['mood'];
+                            }
+                          }
+                        }
+
+                        // 오늘 날짜의 mood 초기화
                         if (data['date'] == todayString) {
                           _selectedMood = data['mood'] ?? 'default';
-                          break;
+                          currentDocId = doc.id; // 오늘 날짜의 문서 ID 저장
+                          break; // 오늘 날짜에 해당하는 문서를 찾았으므로 종료
                         }
                       }
+
+                      if (currentDocId == null) {
+                        return Center(
+                          child: Image.asset(
+                              'assets/images/moodEmoji/defaultMood.png'),
+                        );
+                      }
+
                       return GestureDetector(
                         onTap: () {
                           print('버튼이 클릭되었습니다!');
 
                           showModalBottomSheet(
-                              backgroundColor:
-                                  const Color.fromRGBO(251, 250, 248, 1),
-                              context: context,
-                              builder: (BuildContext context) {
-                                return MoodSelector(
-                                    onMoodSelected: (moodEmoji) {
+                            context: context,
+                            builder: (BuildContext context) {
+                              return MoodSelector(
+                                onMoodSelected: (moodEmoji) {
                                   setState(() {
-                                    _selectedMood =
-                                        moodEmoji; //선택한 이미지로 상태 업데이트
+                                    _selectedMood = moodEmoji;
                                   });
-                                  Navigator.pop(context); // 모달 닫기
-                                });
-                              });
+                                },
+                                currentDocId: currentDocId!, // 전달
+                              );
+                            },
+                          );
                         },
                         child: Image.asset(
                           moodImages[_selectedMood]!,
@@ -181,10 +205,6 @@ class _DiarypageState extends State<Diarypage> {
                         style: const TextStyle(fontSize: 18),
                       ),
                       const SizedBox(width: 10),
-                      const Text(
-                        '수요일',
-                        style: TextStyle(fontSize: 18),
-                      )
                     ],
                   ),
                 ),

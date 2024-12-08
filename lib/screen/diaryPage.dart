@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:moodo/auth_service.dart';
+import 'package:moodo/service/auth_service.dart';
 import 'package:moodo/component/moodSelector.dart';
 import 'package:moodo/component/sentiment_Analyzer.dart';
-import 'package:moodo/diary_service.dart';
+import 'package:moodo/service/diary_service.dart';
 import 'package:provider/provider.dart';
 import 'package:dart_sentiment/dart_sentiment.dart';
 

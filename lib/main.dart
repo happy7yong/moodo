@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moodo/component/MonthSelectorDialog.dart';
 import 'package:moodo/component/flowerPotImage.dart';
-import 'package:moodo/diary_service.dart';
-import 'package:moodo/firebase_options.dart';
-import 'auth_service.dart';
+import 'package:moodo/service/diary_service.dart';
+import 'package:moodo/utils/firebase_options.dart';
+import 'service/auth_service.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
-import 'diaryPage.dart';
+import 'screen/diaryPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

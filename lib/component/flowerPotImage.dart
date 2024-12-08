@@ -42,7 +42,7 @@ class _FlowerpotImageState extends State<FlowerpotImage> {
         potImage = step_2;
       } else if (dataCount >= 10) {
         potImage = step_3;
-      } else if (dataCount >= 10) {
+      } else if (dataCount >= 18) {
         potImage = step_4;
       } else {
         potImage = Default_pot;

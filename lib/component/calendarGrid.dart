@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moodo/screen/diaryPage.dart';
 import 'package:moodo/service/auth_service.dart';
@@ -46,19 +45,27 @@ class CalendarGrid extends StatelessWidget {
     }
 
     return Consumer<DiaryService>(
-      builder: (context, DiaryService, child) {
+      builder: (context, diaryService, child) {
         return StreamBuilder<QuerySnapshot>(
-          stream: DiaryService.streamForMonth(
-              user.uid, firstDayOfMonth.year, firstDayOfMonth.month),
+          stream: diaryService.stream(user.uid),
           builder: (context, snapshot) {
             final documents = snapshot.data?.docs ?? [];
-            final Map<String, String> fetchedMoodData = {};
+            final Map<DateTime, String> fetchedMoodData = {};
 
             for (var doc in documents) {
               final data = doc.data() as Map<String, dynamic>;
-              final date = data['date'] as String?;
-              if (date != null) {
-                fetchedMoodData[date] = data['mood'] ?? 'default';
+              final date = data['date']?.split('-');
+
+              if (date != null && date.length == 3) {
+                final year = int.tryParse(date[0]);
+                final month = int.tryParse(date[1]);
+                final day = int.tryParse(date[2]);
+
+                if (year != null && month != null && day != null) {
+                  final mood = data['mood'] ?? 'default';
+                  final dateKey = DateTime(year, month, day);
+                  fetchedMoodData[dateKey] = mood;
+                }
               }
             }
 
@@ -71,104 +78,80 @@ class CalendarGrid extends StatelessWidget {
                 final cellDate = calendarDays[index];
                 if (cellDate == null) return Container();
 
-                final isToday = cellDate.year == now.year &&
-                    cellDate.month == now.month &&
-                    cellDate.day == now.day;
+                final mood = fetchedMoodData[cellDate];
 
+                final isToday =
+                    cellDate == DateTime(now.year, now.month, now.day);
                 final isPast =
                     cellDate.isBefore(DateTime(now.year, now.month, now.day));
                 final isFuture =
                     cellDate.isAfter(DateTime(now.year, now.month, now.day));
 
-                final dateString =
-                    "${cellDate.year}-${cellDate.month.toString().padLeft(2, '0')}-${cellDate.day.toString().padLeft(2, '0')}";
-                final mood = fetchedMoodData[dateString];
-
-                return _buildCalendarCell(
-                  context,
-                  cellDate,
-                  mood,
-                  moodImages,
-                  isToday,
-                  isPast,
-                  isFuture,
+                return Container(
+                  margin: const EdgeInsets.all(4.0),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: TextButton(
+                              onPressed: isFuture
+                                  ? null
+                                  : () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Diarypage(
+                                            selectedDate: cellDate,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                              style: TextButton.styleFrom(
+                                backgroundColor: isToday
+                                    ? const Color.fromRGBO(255, 240, 223, 1)
+                                    : null,
+                                shape: const CircleBorder(),
+                              ),
+                              child: Center(
+                                child: mood != null
+                                    ? Image.asset(
+                                        moodImages[mood]!,
+                                        width: 40,
+                                        height: 40,
+                                      )
+                                    : Text(
+                                        cellDate.day.toString(),
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: isToday
+                                              ? FontWeight.bold
+                                              : FontWeight.normal,
+                                          color: isToday
+                                              ? const Color.fromRGBO(
+                                                  255, 169, 49, 1)
+                                              : isPast
+                                                  ? Colors.black
+                                                  : Colors.grey,
+                                        ),
+                                      ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 );
               },
             );
           },
         );
       },
-    );
-  }
-
-  Widget _buildCalendarCell(
-    BuildContext context,
-    DateTime cellDate,
-    String? mood,
-    Map<String, String> moodImages,
-    bool isToday,
-    bool isPast,
-    bool isFuture,
-  ) {
-    final dateString =
-        "${cellDate.year}-${cellDate.month.toString().padLeft(2, '0')}-${cellDate.day.toString().padLeft(2, '0')}";
-
-    return Container(
-      margin: const EdgeInsets.all(4.0),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 50,
-                height: 50,
-                child: TextButton(
-                  onPressed: isFuture
-                      ? null
-                      : () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Diarypage(
-                                selectedDate: cellDate,
-                              ),
-                            ),
-                          );
-                        },
-                  style: TextButton.styleFrom(
-                    backgroundColor:
-                        isToday ? const Color.fromRGBO(255, 240, 223, 1) : null,
-                    shape: const CircleBorder(),
-                  ),
-                  child: Center(
-                    child: mood != null && moodImages.containsKey(mood)
-                        ? Image.asset(
-                            moodImages[mood]!,
-                            width: 40,
-                            height: 40,
-                          )
-                        : Text(
-                            cellDate.day.toString(),
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight:
-                                  isToday ? FontWeight.bold : FontWeight.normal,
-                              color: isToday
-                                  ? const Color.fromRGBO(255, 169, 49, 1)
-                                  : isPast
-                                      ? Colors.black
-                                      : Colors.grey,
-                            ),
-                          ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 }

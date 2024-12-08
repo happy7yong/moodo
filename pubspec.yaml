@@ -77,8 +77,8 @@ flutter:
     - assets/images/moodEmoji/positiveMood.png
     - assets/images/moodEmoji/neutralityMood.png
     - assets/images/
-    - assets/images/flower/flower-Rose.png
-    - assets/images/flower/flower-en.png
+    - assets/images/flower/flowerRose.png
+    - assets/images/flower/flowerSliver.png
     - assets/images/pot/default-pot.png
     - assets/images/pot/pot2.png
     - assets/images/pot/pot3.png

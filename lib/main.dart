@@ -355,17 +355,17 @@ class _HomePageState extends State<HomePage> {
           alignment: Alignment.bottomCenter,
           children: [
             Positioned(
-              bottom: 30.0,
+              bottom: 20.0,
               left: 50.0,
               child: SizedBox(
-                width: 80,
-                height: 80,
+                width: 130,
+                height: 130,
                 child: GestureDetector(
                     onTap: () {
                       print("화분이 클릭되었습니다!");
                     },
                     child: Image.asset(
-                      'assets/images/flowerpot.png',
+                      'assets/images/pot/default-pot.png',
                       width: 100,
                       height: 100,
                     )),

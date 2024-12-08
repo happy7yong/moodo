@@ -67,13 +67,10 @@ class _DiarypageState extends State<Diarypage> {
               builder: (context, snapshot) {
                 //해당 날짜에 데이터가 있을 경우 반환하기
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  // 로딩 중 상태
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
-                  // 에러 상태
                   return const Center(child: Text('데이터를 불러오는 중 문제가 발생했습니다.'));
                 } else {
-                  // 데이터가 성공적으로 로드됨
                   final hasData = snapshot.data ?? false;
 
                   return Column(
@@ -125,6 +122,9 @@ class _DiarypageState extends State<Diarypage> {
                               }
                             }
 
+                            print(
+                                "Selected mood for $formattedDate: $_selectedMood");
+
                             if (currentDocId == null) {
                               return Center(
                                 child: Image.asset(
@@ -147,7 +147,7 @@ class _DiarypageState extends State<Diarypage> {
                                           _selectedMood = moodEmoji;
                                         });
                                       },
-                                      currentDocId: currentDocId!, // 전달
+                                      currentDocId: currentDocId!,
                                     );
                                   },
                                 );

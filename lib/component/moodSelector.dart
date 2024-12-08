@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 class MoodSelector extends StatefulWidget {
   final Function(String) onMoodSelected;
-  final String currentDocId; // 현재 문서 ID를 추가로 전달받음
+  final String currentDocId;
 
   const MoodSelector(
       {super.key, required this.onMoodSelected, required this.currentDocId});

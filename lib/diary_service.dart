@@ -14,7 +14,7 @@ class DiaryService extends ChangeNotifier {
   }
 
   //생성
-  void create(String date, String uid, String? content, String? mood) async {
+  void create(String date, String uid, String content, String? mood) async {
     if (date.isNotEmpty && uid.isNotEmpty) {
       await DiaryCollection.add({
         'date': date,
@@ -22,14 +22,11 @@ class DiaryService extends ChangeNotifier {
         'uid': uid,
         'mood': mood,
       });
-    } else {
-      print("날짜와 UID는 필수 값입니다.");
     }
   }
 
   //수정
-  void update(String docId, String date, String uid, String? content,
-      String? mood) async {
+  void update(String? docId, String content) async {
     await DiaryCollection.doc(docId).update({
       'content': content,
     });

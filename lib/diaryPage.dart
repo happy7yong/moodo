@@ -43,6 +43,7 @@ class _DiarypageState extends State<Diarypage> {
   Widget build(BuildContext context) {
     final authService = context.read<AuthService>();
     final user = authService.currentUser()!;
+    String? currentDocId;
 
     return Consumer<DiaryService>(
       builder: (context, DiaryService, child) {
@@ -68,7 +69,7 @@ class _DiarypageState extends State<Diarypage> {
 
                       final todayString =
                           "${widget.selectedDate.year}-${widget.selectedDate.month}-${widget.selectedDate.day}";
-                      String? currentDocId;
+
                       // 날짜별 moodData 맵 생성
                       final Map<int, String> moodData = {};
                       final now = DateTime.now();
@@ -91,7 +92,6 @@ class _DiarypageState extends State<Diarypage> {
                       for (var doc in documents) {
                         final data = doc.data() as Map<String, dynamic>;
                         if (data['date'] != null && data['mood'] != null) {
-                          // Firebase에 저장된 날짜를 파싱하여 일(day)만 추출
                           final dateParts = data['date'].split('-');
                           if (dateParts.length == 3 &&
                               int.tryParse(dateParts[0]) == now.year &&
@@ -103,11 +103,10 @@ class _DiarypageState extends State<Diarypage> {
                           }
                         }
 
-                        // 오늘 날짜의 mood 초기화
                         if (data['date'] == todayString) {
                           _selectedMood = data['mood'] ?? 'default';
-                          currentDocId = doc.id; // 오늘 날짜의 문서 ID 저장
-                          break; // 오늘 날짜에 해당하는 문서를 찾았으므로 종료
+                          currentDocId = doc.id;
+                          break;
                         }
                       }
 
@@ -144,57 +143,74 @@ class _DiarypageState extends State<Diarypage> {
                       );
                     }),
                 const SizedBox(height: 10),
-                Column(
-                  children: [
-                    if (_selectedMood == 'positive' ||
-                        _selectedMood == 'neutral' ||
-                        _selectedMood == 'negative')
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/images/mentStar',
-                            width: 10,
-                            height: 10,
-                          ),
-                          Text(
-                            _selectedMood == 'positive'
-                                ? '기분 좋은 하루셨군요!'
-                                : _selectedMood == 'neutral'
-                                    ? '평온한 하루는 때때로 가장 특별한 순간이죠.'
-                                    : '힘든 하루를 보내셨군요.',
-                            style: TextStyle(),
-                          ),
-                        ],
-                      ),
-                    if (_selectedMood == 'default')
-                      Container(
-                        width: 300,
-                        height: 70,
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                            color: const Color.fromRGBO(255, 221, 173, 1),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                if (currentDocId != null)
+                  FutureBuilder<DocumentSnapshot>(
+                      future: FirebaseFirestore.instance
+                          .collection('Diary')
+                          .doc(currentDocId)
+                          .get(),
+                      builder: (context, snapshot) {
+                        String moodData =
+                            snapshot.data?.get('mood') ?? 'default';
+                        bool isExistingEntry = moodData == 'positive' ||
+                            moodData == 'neutral' ||
+                            moodData == 'negative';
+
+                        return Column(
                           children: [
-                            Text(
-                              '오늘의 일기를 모두 기록하면',
-                              style: TextStyle(fontSize: 18, height: 1.1),
-                            ),
-                            Text(
-                              '오늘의 감정 이모티콘이 생겨요!',
-                              style: TextStyle(fontSize: 18, height: 1.1),
-                            ),
+                            if (isExistingEntry)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/mentStar.png',
+                                    width: 20,
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    moodData == 'positive'
+                                        ? '기분 좋은 하루셨군요!'
+                                        : moodData == 'neutral'
+                                            ? '평온한 하루는 때때로 가장 특별한 순간이죠.'
+                                            : '힘든 하루를 보내셨군요.',
+                                    style: TextStyle(
+                                        color: Color.fromRGBO(255, 189, 98, 1)),
+                                  ),
+                                ],
+                              ),
+                            if (!isExistingEntry)
+                              Container(
+                                width: 300,
+                                height: 70,
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color:
+                                        const Color.fromRGBO(255, 221, 173, 1),
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: const Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '오늘의 일기를 모두 기록하면',
+                                      style:
+                                          TextStyle(fontSize: 18, height: 1.1),
+                                    ),
+                                    Text(
+                                      '오늘의 감정 이모티콘이 생겨요!',
+                                      style:
+                                          TextStyle(fontSize: 18, height: 1.1),
+                                    ),
+                                  ],
+                                ),
+                              ),
                           ],
-                        ),
-                      ),
-                  ],
-                ),
+                        );
+                      }),
                 const SizedBox(height: 15),
                 Center(
                   child: Row(
@@ -303,11 +319,9 @@ class _DiarypageState extends State<Diarypage> {
 
                                   // 선택된 기분 업데이트
                                   setState(() {
-                                    _selectedMood =
-                                        sentimentKeyword; // 키워드를 사용하여 상태 업데이트
+                                    _selectedMood = sentimentKeyword;
                                   });
-                                  // 감정 분석 호출
-                                  //analyzeKoreanSentiment(textToAnalyze);
+
                                   final formattedDate =
                                       "${widget.selectedDate.year}-${widget.selectedDate.month}-${widget.selectedDate.day}";
                                   DiaryService.create(formattedDate, user.uid,
@@ -346,6 +360,18 @@ class _DiarypageState extends State<Diarypage> {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 19,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: GestureDetector(
+                    onTap: () {
+                      DiaryService.update(currentDocId, DiaryCollection.text);
+                    },
+                    child: Image.asset(
+                      'assets/images/updataIcon.png',
                     ),
                   ),
                 ),

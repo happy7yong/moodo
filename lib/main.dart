@@ -448,7 +448,6 @@ class CalendarGrid extends StatelessWidget {
 
     return Consumer<DiaryService>(
       builder: (context, DiaryService, child) {
-        // StreamBuilder로 실시간 업데이트 처리
         return StreamBuilder<QuerySnapshot>(
           stream: DiaryService.stream(user.uid), // DiaryService에서 실시간 스트림 제공
           builder: (context, snapshot) {

@@ -137,6 +137,8 @@ class _DiarypageState extends State<Diarypage> {
                                 print('버튼이 클릭되었습니다!');
 
                                 showModalBottomSheet(
+                                  backgroundColor:
+                                      Color.fromRGBO(251, 250, 248, 1),
                                   context: context,
                                   builder: (BuildContext context) {
                                     return MoodSelector(

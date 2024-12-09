@@ -48,6 +48,7 @@ dependencies:
   dart_sentiment: ^0.0.9
   translator: ^1.0.3+1
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -77,12 +78,21 @@ flutter:
     - assets/images/moodEmoji/positiveMood.png
     - assets/images/moodEmoji/neutralityMood.png
     - assets/images/
-    - assets/images/flower/flower-Rose.png
-    - assets/images/flower/flower-en.png
+    - assets/images/flower/flowerRose.png
+    - assets/images/flower/flowerSilver.png
+    - assets/images/flower/flowerPeony.png
+    - assets/images/flower/flowerHydran.png
+    - assets/images/flower/flowerLily.png
+    - assets/images/flower/flowerSun.png
     - assets/images/pot/default-pot.png
     - assets/images/pot/pot2.png
     - assets/images/pot/pot3.png
-    - assets/images/pot/pot4.png
+    - assets/images/pot/potSilver.png
+    - assets/images/pot/potRose.png
+    - assets/images/pot/potHydran.png
+    - assets/images/pot/potSun.png
+    - assets/images/pot/potLily.png
+    - assets/images/pot/potPeony.png
   fonts:
     - family: leeseoyun
       fonts:

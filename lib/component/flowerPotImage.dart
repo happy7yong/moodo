@@ -112,12 +112,21 @@ class _FlowerpotImageState extends State<FlowerpotImage> {
           onTap: () async {
             if (isEndOfMonth && dataCount >= 18) {
               final moodStats = await getMoodStatistics();
+
+              print("moodStats: $moodStats");
+              print("Positive Count: $positiveCount");
+              print("Neutral Count: $neutralCount");
+              print("Negative Count: $negativeCount");
+
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => Flowerroompage(
                     moodStats: moodStats,
                     month: widget.selectedMonth,
+                    positiveCount: positiveCount,
+                    neutralCount: neutralCount,
+                    negativeCount: negativeCount,
                   ),
                 ),
               );

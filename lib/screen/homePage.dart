@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                   height: 30,
                 ),
                 Text(
-                  '${_currentMonth?.toString().padLeft(2, '0') ?? '로딩 중'}월',
+                  '${_currentMonth?.toString() ?? '로딩 중'}월',
                   style: const TextStyle(fontSize: 26),
                 ),
 

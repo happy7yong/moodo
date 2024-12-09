@@ -125,7 +125,6 @@ class _FlowerpotImageState extends State<FlowerpotImage> {
             if (isEndOfMonth && dataCount >= 18) {
               final moodStats = await getMoodStatistics();
 
-              print("moodStats: $moodStats");
               print("Positive Count: $positiveCount");
               print("Neutral Count: $neutralCount");
               print("Negative Count: $negativeCount");

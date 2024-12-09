@@ -8,7 +8,11 @@ class Flowerroompage extends StatelessWidget {
   static const String FlowerHydran = "assets/images/flower/flowerHydran.png";
   static const String FlowerLily = "assets/images/flower/flowerLliy.png";
   static const String FlowerSun = "assets/images/flower/flowerSun.png";
-
+  final Map<String, String> moodImages = {
+    'positive': 'assets/images/moodEmoji/positiveMood.png',
+    'neutral': 'assets/images/moodEmoji/neutralityMood.png',
+    'negative': 'assets/images/moodEmoji/negativeMood.png',
+  };
   final Map<String, TextStyle> flowerStyles = {
     '장미꽃':
         TextStyle(fontSize: 20, color: const Color.fromARGB(255, 253, 92, 146)),
@@ -46,24 +50,25 @@ class Flowerroompage extends StatelessWidget {
     final String flowerImage;
 
     //mood 비율에 따른 꽃 종류
-    if (positiveCount > neutralCount && neutralCount > negativeCount) {
+    if (positiveCount >= neutralCount && neutralCount > negativeCount) {
       flowerImage = FlowerRose;
-      flowerName = '장미꽃'; // 긍 > 중 > 부
-    } else if (positiveCount > neutralCount && neutralCount < negativeCount) {
+      flowerName = '장미꽃'; // 긍 >= 중 > 부
+    } else if (positiveCount > neutralCount && neutralCount <= negativeCount) {
       flowerImage = FlowerPeony;
-      flowerName = '모란꽃'; // 긍 > 부 > 중
-    } else if (neutralCount > positiveCount && positiveCount > negativeCount) {
+      flowerName = '모란꽃'; // 긍 > 부 >= 중
+    } else if (neutralCount >= positiveCount && positiveCount > negativeCount) {
       flowerImage = FlowerSun;
-      flowerName = '해바라기꽃'; // 중 > 긍 > 부
-    } else if (neutralCount > negativeCount && positiveCount < negativeCount) {
+      flowerName = '해바라기꽃'; // 중 >= 긍 > 부
+    } else if (neutralCount >= negativeCount &&
+        positiveCount <= negativeCount) {
       flowerImage = FlowerLily;
-      flowerName = '백합꽃'; // 중 > 부 > 긍
-    } else if (negativeCount > neutralCount && neutralCount > positiveCount) {
+      flowerName = '백합꽃'; // 중 >= 부 >= 긍
+    } else if (negativeCount >= neutralCount && neutralCount > positiveCount) {
       flowerImage = FlowerSilver;
-      flowerName = '은방울꽃'; // 부 > 중 > 긍
-    } else if (negativeCount > positiveCount && positiveCount > neutralCount) {
+      flowerName = '은방울꽃'; // 부 >= 중 > 긍
+    } else if (negativeCount > positiveCount && positiveCount >= neutralCount) {
       flowerImage = FlowerHydran;
-      flowerName = '수국꽃'; // 부 > 긍 > 중
+      flowerName = '수국꽃'; // 부 > 긍 >= 중
     } else {
       flowerImage = FlowerSilver;
       flowerName = '기본 (은방울)꽃'; // 기본값
@@ -82,6 +87,9 @@ class Flowerroompage extends StatelessWidget {
             Center(
               child: Column(
                 children: [
+                  SizedBox(
+                    height: 50,
+                  ),
                   Text(
                     '$month월',
                     style: TextStyle(
@@ -97,8 +105,8 @@ class Flowerroompage extends StatelessWidget {
                   const SizedBox(height: 16),
                   Image.asset(
                     flowerImage,
-                    width: 500,
-                    height: 500,
+                    width: 400,
+                    height: 400,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -118,22 +126,22 @@ class Flowerroompage extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 70),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildMoodStatCard(
-                  'Positive',
+                MoodStatComponent(
+                  'positive',
                   positiveCount,
                   Colors.red,
                 ),
-                _buildMoodStatCard(
-                  'Neutral',
+                MoodStatComponent(
+                  'neutral',
                   neutralCount,
                   Colors.yellow,
                 ),
-                _buildMoodStatCard(
-                  'Negative',
+                MoodStatComponent(
+                  'negative',
                   negativeCount,
                   Colors.blue,
                 ),
@@ -145,21 +153,19 @@ class Flowerroompage extends StatelessWidget {
     );
   }
 
-  Widget _buildMoodStatCard(String mood, int count, Color color) {
+  Widget MoodStatComponent(String mood, int count, Color color) {
     return Column(
       children: [
-        CircleAvatar(
-          radius: 30,
-          backgroundColor: color,
-          child: Text(
-            count.toString(),
-            style: const TextStyle(color: Colors.white, fontSize: 20),
-          ),
+        Text(
+          count.toString(),
+          style: const TextStyle(
+              color: Color.fromARGB(255, 22, 22, 22), fontSize: 20),
         ),
         const SizedBox(height: 8),
-        Text(
-          mood,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        Image.asset(
+          moodImages[mood] ?? 'assets/images/moodEmoji/defaultMood.png',
+          width: 60,
+          height: 60,
         ),
       ],
     );

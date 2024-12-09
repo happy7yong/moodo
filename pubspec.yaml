@@ -82,12 +82,17 @@ flutter:
     - assets/images/flower/flowerSilver.png
     - assets/images/flower/flowerPeony.png
     - assets/images/flower/flowerHydran.png
+    - assets/images/flower/flowerLily.png
+    - assets/images/flower/flowerSun.png
     - assets/images/pot/default-pot.png
     - assets/images/pot/pot2.png
     - assets/images/pot/pot3.png
     - assets/images/pot/potSilver.png
     - assets/images/pot/potRose.png
     - assets/images/pot/potHydran.png
+    - assets/images/pot/potSun.png
+    - assets/images/pot/potLily.png
+    - assets/images/pot/potPeony.png
   fonts:
     - family: leeseoyun
       fonts:

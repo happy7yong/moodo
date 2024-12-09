@@ -58,23 +58,25 @@ class _HomePageState extends State<HomePage> {
                     builder: (context) {
                       return AlertDialog(
                         backgroundColor: Colors.white,
-                        title: const Text("월 선택"),
+                        title: Center(child: const Text("2024")),
                         content: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.8,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: List.generate(
-                              12,
-                              (index) {
-                                final month = index + 1;
-                                return ListTile(
-                                  title: Text("${2024}년 $month월"),
-                                  onTap: () {
-                                    Navigator.of(context)
-                                        .pop(month); // 선택한 월 반환
-                                  },
-                                );
-                              },
+                          height: 400, // 스크롤 영역의 높이를 제한
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: List.generate(
+                                12,
+                                (index) {
+                                  final month = index + 1;
+                                  return ListTile(
+                                    title: Text("$month월"),
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .pop(month); // 선택한 월 반환
+                                    },
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ),
@@ -116,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                           child: Text(
                             day,
                             style: const TextStyle(
-                                fontSize: 20,
+                                fontSize: 18,
                                 color: Color.fromRGBO(96, 96, 96, 1)),
                           ),
                         ),
@@ -139,10 +141,10 @@ class _HomePageState extends State<HomePage> {
           children: [
             Positioned(
               bottom: 20.0,
-              left: 50.0,
+              left: 30.0,
               child: SizedBox(
-                width: 130,
-                height: 130,
+                width: 110,
+                height: 110,
                 child: FlowerpotImage(
                   selectedMonth: _currentMonth!,
                 ),

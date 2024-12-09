@@ -307,22 +307,22 @@ class _DiarypageState extends State<Diarypage> {
                                         const SizedBox(height: 20),
                                         const Text(
                                           '오늘의 기록을 모두 작성하셨나요?',
-                                          style: TextStyle(fontSize: 20),
+                                          style: TextStyle(fontSize: 17),
                                         ),
                                         const SizedBox(height: 13),
                                         const SizedBox(
-                                          width: 300,
+                                          width: 230,
                                           child: Column(
                                             children: [
                                               Text(
                                                 '현재 작성된 일기를 기반으로',
                                                 style: TextStyle(
-                                                    fontSize: 17, height: 1),
+                                                    fontSize: 15, height: 1),
                                               ),
                                               Text(
                                                 '감정 이모티콘을 추천해드릴게요!',
                                                 style: TextStyle(
-                                                    fontSize: 17, height: 1),
+                                                    fontSize: 15, height: 1),
                                               )
                                             ],
                                           ),
@@ -360,13 +360,13 @@ class _DiarypageState extends State<Diarypage> {
                                           backgroundColor: const Color.fromRGBO(
                                               255, 186, 101, 1),
                                           elevation: 0,
-                                          minimumSize: const Size(140, 50),
+                                          minimumSize: const Size(130, 40),
                                         ),
                                         child: const Text(
                                           '감정 받기',
                                           style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 18),
+                                              fontSize: 17),
                                         ),
                                       ),
                                     ),

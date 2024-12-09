@@ -88,7 +88,6 @@ class CalendarGrid extends StatelessWidget {
                     cellDate.isAfter(DateTime(now.year, now.month, now.day));
 
                 return Container(
-                  margin: const EdgeInsets.all(4.0),
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
@@ -96,8 +95,8 @@ class CalendarGrid extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
-                            width: 50,
-                            height: 50,
+                            width: 40,
+                            height: 40,
                             child: TextButton(
                               onPressed: isFuture
                                   ? null
@@ -121,13 +120,14 @@ class CalendarGrid extends StatelessWidget {
                                 child: mood != null
                                     ? Image.asset(
                                         moodImages[mood]!,
-                                        width: 40,
-                                        height: 40,
+                                        width: 200,
+                                        height: 200,
+                                        fit: BoxFit.contain,
                                       )
                                     : Text(
                                         cellDate.day.toString(),
                                         style: TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 12,
                                           fontWeight: isToday
                                               ? FontWeight.bold
                                               : FontWeight.normal,

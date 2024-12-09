@@ -47,6 +47,19 @@ class _DiarypageState extends State<Diarypage> {
     final formattedDate =
         "${widget.selectedDate.year}-${widget.selectedDate.month}-${widget.selectedDate.day}";
 
+    String getDayOfWeek(DateTime date) {
+      const daysOfWeek = [
+        '월',
+        '화',
+        '수',
+        '목',
+        '금',
+        '토',
+        '일',
+      ];
+      return daysOfWeek[date.weekday - 1];
+    }
+
     return Consumer<DiaryService>(
       builder: (context, DiaryService, child) {
         return Scaffold(
@@ -240,7 +253,11 @@ class _DiarypageState extends State<Diarypage> {
                               "${widget.selectedDate.year}년 ${widget.selectedDate.month}월 ${widget.selectedDate.day}일",
                               style: const TextStyle(fontSize: 18),
                             ),
-                            const SizedBox(width: 10),
+                            const SizedBox(width: 6),
+                            Text(
+                              '${getDayOfWeek(widget.selectedDate)}요일',
+                              style: const TextStyle(fontSize: 18),
+                            ),
                           ],
                         ),
                       ),

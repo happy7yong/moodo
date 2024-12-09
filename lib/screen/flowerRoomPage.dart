@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
 class Flowerroompage extends StatelessWidget {
+  //꽃 이미지
+  static const String FlowerRose = "assets/images/flower/flowerRose.png";
+  static const String FlowerSilver = "assets/images/flower/flowerSilver.png";
+  static const String FlowerPeony = "assets/images/flower/flowerPeony.png";
+  static const String FlowerHydran = "assets/images/flower/flowerHydran.png";
+  static const String FlowerLily = "assets/images/flower/flowerLliy.png";
+  static const String FlowerSun = "assets/images/flower/flowerSun.png";
+
   final Map<String, int> moodStats;
   final int month;
 
@@ -21,14 +29,14 @@ class Flowerroompage extends StatelessWidget {
 
     //mood 비율에 따른 꽃 종류
     if (positiveCount > neutralCount && neutralCount > negativeCount) {
-      flowerImage = 'assets/images/flower/flowerRose.png';
+      flowerImage = FlowerRose;
       flowerName = '장미꽃';
     } else if (positiveCount < neutralCount && neutralCount < negativeCount) {
-      flowerImage = 'assets/images/flower/flowerSilver.png';
+      flowerImage = FlowerSilver;
       flowerName = '은방울꽃';
     } else {
-      flowerImage = 'assets/images/flower/defaultFlower.png';
-      flowerName = '기본 꽃';
+      flowerImage = FlowerSilver;
+      flowerName = '기본 (은방울)꽃';
     }
 
     return Scaffold(

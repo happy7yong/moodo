@@ -79,10 +79,6 @@ class _FlowerpotImageState extends State<FlowerpotImage> {
     return FutureBuilder<Map<String, int>>(
       future: getMoodStatistics(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
-        }
-
         final moodStats = snapshot.data ?? {};
         final positiveCount = moodStats['positive'] ?? 0;
         final neutralCount = moodStats['neutral'] ?? 0;

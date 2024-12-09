@@ -117,28 +117,32 @@ class CalendarGrid extends StatelessWidget {
                                 shape: const CircleBorder(),
                               ),
                               child: Center(
-                                child: mood != null
-                                    ? Image.asset(
-                                        moodImages[mood]!,
-                                        width: 200,
-                                        height: 200,
-                                        fit: BoxFit.contain,
-                                      )
-                                    : Text(
-                                        cellDate.day.toString(),
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: isToday
-                                              ? FontWeight.bold
-                                              : FontWeight.normal,
-                                          color: isToday
-                                              ? const Color.fromRGBO(
-                                                  255, 169, 49, 1)
-                                              : isPast
-                                                  ? Colors.black
-                                                  : Colors.grey,
+                                child: OverflowBox(
+                                  maxWidth: double.infinity,
+                                  maxHeight: double.infinity,
+                                  child: mood != null
+                                      ? Image.asset(
+                                          moodImages[mood]!,
+                                          width: 40,
+                                          height: 40,
+                                          fit: BoxFit.contain,
+                                        )
+                                      : Text(
+                                          cellDate.day.toString(),
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: isToday
+                                                ? FontWeight.bold
+                                                : FontWeight.normal,
+                                            color: isToday
+                                                ? const Color.fromRGBO(
+                                                    255, 169, 49, 1)
+                                                : isPast
+                                                    ? Colors.black
+                                                    : Colors.grey,
+                                          ),
                                         ),
-                                      ),
+                                ),
                               ),
                             ),
                           ),

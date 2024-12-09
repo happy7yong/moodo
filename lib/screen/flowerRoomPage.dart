@@ -9,13 +9,29 @@ class Flowerroompage extends StatelessWidget {
   static const String FlowerLily = "assets/images/flower/flowerLliy.png";
   static const String FlowerSun = "assets/images/flower/flowerSun.png";
 
+  final Map<String, TextStyle> flowerStyles = {
+    '장미꽃':
+        TextStyle(fontSize: 20, color: const Color.fromARGB(255, 253, 92, 146)),
+    '모란꽃': TextStyle(
+        fontSize: 20, color: const Color.fromARGB(255, 255, 154, 196)),
+    '해바라기꽃':
+        TextStyle(fontSize: 20, color: const Color.fromARGB(255, 255, 195, 66)),
+    '백합꽃': TextStyle(
+        fontSize: 20, color: const Color.fromARGB(255, 132, 182, 207)),
+    '은방울꽃': TextStyle(fontSize: 20, color: Color.fromRGBO(124, 149, 246, 1)),
+    '수국꽃': TextStyle(
+        fontSize: 20, color: const Color.fromARGB(255, 125, 116, 245)),
+  };
+
+  final TextStyle defaultStyle = TextStyle(fontSize: 20);
+
   final Map<String, int> moodStats;
   final int month;
   final int positiveCount;
   final int neutralCount;
   final int negativeCount;
 
-  const Flowerroompage({
+  Flowerroompage({
     super.key,
     required this.moodStats,
     required this.month,
@@ -32,13 +48,25 @@ class Flowerroompage extends StatelessWidget {
     //mood 비율에 따른 꽃 종류
     if (positiveCount > neutralCount && neutralCount > negativeCount) {
       flowerImage = FlowerRose;
-      flowerName = '장미꽃';
-    } else if (positiveCount < neutralCount && neutralCount < negativeCount) {
+      flowerName = '장미꽃'; // 긍 > 중 > 부
+    } else if (positiveCount > neutralCount && neutralCount < negativeCount) {
+      flowerImage = FlowerPeony;
+      flowerName = '모란꽃'; // 긍 > 부 > 중
+    } else if (neutralCount > positiveCount && positiveCount > negativeCount) {
+      flowerImage = FlowerSun;
+      flowerName = '해바라기꽃'; // 중 > 긍 > 부
+    } else if (neutralCount > negativeCount && positiveCount < negativeCount) {
+      flowerImage = FlowerLily;
+      flowerName = '백합꽃'; // 중 > 부 > 긍
+    } else if (negativeCount > neutralCount && neutralCount > positiveCount) {
       flowerImage = FlowerSilver;
-      flowerName = '은방울꽃';
+      flowerName = '은방울꽃'; // 부 > 중 > 긍
+    } else if (negativeCount > positiveCount && positiveCount > neutralCount) {
+      flowerImage = FlowerHydran;
+      flowerName = '수국꽃'; // 부 > 긍 > 중
     } else {
       flowerImage = FlowerSilver;
-      flowerName = '기본 (은방울)꽃';
+      flowerName = '기본 (은방울)꽃'; // 기본값
     }
 
     return Scaffold(
@@ -77,11 +105,7 @@ class Flowerroompage extends StatelessWidget {
                     children: [
                       Text(
                         flowerName,
-                        style: flowerName == '장미꽃'
-                            ? TextStyle(fontSize: 20, color: Colors.pink)
-                            : flowerName == '은방울꽃'
-                                ? TextStyle(fontSize: 20, color: Colors.blue)
-                                : TextStyle(fontSize: 20, color: Colors.black),
+                        style: flowerStyles[flowerName] ?? defaultStyle,
                       ),
                       Text(
                         '이 피어났어요',

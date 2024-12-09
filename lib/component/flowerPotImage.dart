@@ -92,7 +92,7 @@ class _FlowerpotImageState extends State<FlowerpotImage> {
 
         return GestureDetector(
           onTap: () async {
-            if (isEndOfMonth) {
+            if (isEndOfMonth && dataCount >= 18) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -102,6 +102,9 @@ class _FlowerpotImageState extends State<FlowerpotImage> {
                   ),
                 ),
               );
+              print("화분이 클릭되었습니다!");
+              print(
+                  '현재 월(${widget.selectedMonth})의 데이터 개수: $dataCount'); //전체 데이터 반영 로그
             } else {
               print("화분이 클릭되었습니다!");
               print(

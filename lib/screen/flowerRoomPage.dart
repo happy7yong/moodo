@@ -11,21 +11,23 @@ class Flowerroompage extends StatelessWidget {
 
   final Map<String, int> moodStats;
   final int month;
+  final int positiveCount;
+  final int neutralCount;
+  final int negativeCount;
 
   const Flowerroompage({
     super.key,
     required this.moodStats,
     required this.month,
+    required this.positiveCount,
+    required this.neutralCount,
+    required this.negativeCount,
   });
 
   @override
   Widget build(BuildContext context) {
     final String flowerName;
     final String flowerImage;
-    //mood count
-    final positiveCount = moodStats['positive'] ?? 0;
-    final neutralCount = moodStats['neutral'] ?? 0;
-    final negativeCount = moodStats['negative'] ?? 0;
 
     //mood 비율에 따른 꽃 종류
     if (positiveCount > neutralCount && neutralCount > negativeCount) {
@@ -67,12 +69,27 @@ class Flowerroompage extends StatelessWidget {
                   const SizedBox(height: 16),
                   Image.asset(
                     flowerImage,
-                    width: 400,
-                    height: 400,
+                    width: 500,
+                    height: 500,
                   ),
-                  Text(
-                    '$flowerName이 피어났어요',
-                    style: TextStyle(fontSize: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        flowerName,
+                        style: flowerName == '장미꽃'
+                            ? TextStyle(fontSize: 20, color: Colors.pink)
+                            : flowerName == '은방울꽃'
+                                ? TextStyle(fontSize: 20, color: Colors.blue)
+                                : TextStyle(fontSize: 20, color: Colors.black),
+                      ),
+                      Text(
+                        '이 피어났어요',
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                    ],
                   )
                 ],
               ),
@@ -83,17 +100,17 @@ class Flowerroompage extends StatelessWidget {
               children: [
                 _buildMoodStatCard(
                   'Positive',
-                  moodStats['positive'] ?? 0,
+                  positiveCount,
                   Colors.red,
                 ),
                 _buildMoodStatCard(
                   'Neutral',
-                  moodStats['neutral'] ?? 0,
+                  neutralCount,
                   Colors.yellow,
                 ),
                 _buildMoodStatCard(
                   'Negative',
-                  moodStats['negative'] ?? 0,
+                  negativeCount,
                   Colors.blue,
                 ),
               ],

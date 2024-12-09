@@ -79,75 +79,104 @@ class Flowerroompage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(251, 250, 248, 1),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 50,
-                  ),
-                  Text(
-                    '$month월',
-                    style: TextStyle(
-                      fontSize: 20,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 50,
                     ),
-                  ),
-                  Text(
-                    '당신의 꽃은,',
-                    style: TextStyle(
-                      fontSize: 20,
+                    Text(
+                      '$month월',
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  Image.asset(
-                    flowerImage,
-                    width: 400,
-                    height: 400,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    Text(
+                      '당신의 꽃은,',
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Image.asset(
+                      flowerImage,
+                      width: 400,
+                      height: 400,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          flowerName,
+                          style: flowerStyles[flowerName] ?? defaultStyle,
+                        ),
+                        Text(
+                          '이 피어났어요',
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              const SizedBox(height: 80),
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                        color: Color.fromRGBO(224, 223, 220, 1), width: 1),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Padding(
+                  padding: const EdgeInsets.all(25.0),
+                  child: Column(
                     children: [
                       Text(
-                        flowerName,
-                        style: flowerStyles[flowerName] ?? defaultStyle,
+                        "$month월",
+                        style: TextStyle(fontSize: 20),
                       ),
                       Text(
-                        '이 피어났어요',
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
+                        "나의 감정 통계",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          MoodStatComponent(
+                            'positive',
+                            positiveCount,
+                            const Color.fromARGB(255, 255, 145, 137),
+                          ),
+                          SizedBox(width: 20),
+                          MoodStatComponent(
+                            'neutral',
+                            neutralCount,
+                            const Color.fromARGB(255, 255, 203, 59),
+                          ),
+                          SizedBox(width: 20),
+                          MoodStatComponent(
+                            'negative',
+                            negativeCount,
+                            Colors.blue,
+                          ),
+                        ],
                       ),
                     ],
-                  )
-                ],
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 70),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                MoodStatComponent(
-                  'positive',
-                  positiveCount,
-                  Colors.red,
-                ),
-                MoodStatComponent(
-                  'neutral',
-                  neutralCount,
-                  Colors.yellow,
-                ),
-                MoodStatComponent(
-                  'negative',
-                  negativeCount,
-                  Colors.blue,
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -158,8 +187,8 @@ class Flowerroompage extends StatelessWidget {
       children: [
         Text(
           count.toString(),
-          style: const TextStyle(
-              color: Color.fromARGB(255, 22, 22, 22), fontSize: 20),
+          style: TextStyle(
+              color: color, fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         Image.asset(

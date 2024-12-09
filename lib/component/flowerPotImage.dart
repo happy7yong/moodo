@@ -12,7 +12,6 @@ class FlowerpotImage extends StatefulWidget {
 }
 
 class _FlowerpotImageState extends State<FlowerpotImage> {
-  //화분 이미지 정의
   static const String Default_pot = 'assets/images/pot/default-pot.png';
   static const String step_2 = 'assets/images/pot/pot2.png';
   static const String step_3 = 'assets/images/pot/pot3.png';
@@ -72,27 +71,47 @@ class _FlowerpotImageState extends State<FlowerpotImage> {
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
-    // 월의 마지막일자
+    //월의 마지막일자
     final isEndOfMonth = DateTime(now.year, now.month, now.day)
         .isAfter(DateTime(now.year, widget.selectedMonth, 28)); // 28일 이후 조건
 
-    return FutureBuilder<Map<String, int>>(
-      future: getMoodStatistics(),
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('Diary')
+          .where('date',
+              isGreaterThanOrEqualTo: '${now.year}-${widget.selectedMonth}-01')
+          .where('date',
+              isLessThan: '${now.year}-${widget.selectedMonth + 1}-01')
+          .snapshots(),
       builder: (context, snapshot) {
-        final moodStats = snapshot.data ?? {};
-        final positiveCount = moodStats['positive'] ?? 0;
-        final neutralCount = moodStats['neutral'] ?? 0;
-        final negativeCount = moodStats['negative'] ?? 0;
+        // 초기화된 moodCounts 정의
+        final moodCounts = {
+          'positive': 0,
+          'neutral': 0,
+          'negative': 0,
+        };
 
-        final dataCount =
-            positiveCount + neutralCount + negativeCount; // 전체 데이터 개수
+        // Firestore 데이터를 기반으로 moodCounts 계산
+        if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+          for (var doc in snapshot.data!.docs) {
+            final mood = doc['mood'] ?? 'default';
+            if (moodCounts.containsKey(mood)) {
+              moodCounts[mood] = moodCounts[mood]! + 1;
+            }
+          }
+        }
 
+        final positiveCount = moodCounts['positive']!;
+        final neutralCount = moodCounts['neutral']!;
+        final negativeCount = moodCounts['negative']!;
+        final dataCount = positiveCount + neutralCount + negativeCount;
         final potImage =
             getPotImage(dataCount, positiveCount, neutralCount, negativeCount);
 
         return GestureDetector(
           onTap: () async {
             if (isEndOfMonth && dataCount >= 18) {
+              final moodStats = await getMoodStatistics();
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -102,13 +121,9 @@ class _FlowerpotImageState extends State<FlowerpotImage> {
                   ),
                 ),
               );
-              print("화분이 클릭되었습니다!");
-              print(
-                  '현재 월(${widget.selectedMonth})의 데이터 개수: $dataCount'); //전체 데이터 반영 로그
             } else {
               print("화분이 클릭되었습니다!");
-              print(
-                  '현재 월(${widget.selectedMonth})의 데이터 개수: $dataCount'); //전체 데이터 반영 로그
+              print('현재 월(${widget.selectedMonth})의 데이터 개수: $dataCount');
             }
           },
           child: Image.asset(

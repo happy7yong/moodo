@@ -18,6 +18,9 @@ class _FlowerpotImageState extends State<FlowerpotImage> {
   static const String potRose = 'assets/images/pot/potRose.png';
   static const String potSilver = 'assets/images/pot/potSilver.png';
   static const String potPeony = 'assets/images/pot/potPeony.png';
+  static const String potLily = 'assets/images/pot/potLily.png';
+  static const String potSun = 'assets/images/pot/potSun.png';
+  static const String potHydran = 'assets/images/pot/potHydran.png';
 
   String getPotImage(
       int dataCount, int positiveCount, int neutralCount, int negativeCount) {
@@ -26,8 +29,17 @@ class _FlowerpotImageState extends State<FlowerpotImage> {
         return potRose; // 긍 > 중 > 부 : 장미꽃
       } else if (positiveCount > neutralCount && neutralCount < negativeCount) {
         return potPeony; // 긍 > 부 > 중 : 모란꽃
-      } else if (positiveCount < neutralCount && neutralCount < negativeCount) {
+      } else if (neutralCount > positiveCount &&
+          positiveCount > negativeCount) {
+        return potSun; // 중 > 긍 > 부 : 해바라기꽃
+      } else if (neutralCount > negativeCount &&
+          positiveCount < negativeCount) {
+        return potLily; // 중 > 부 > 긍 : 백합꽃
+      } else if (negativeCount > neutralCount && neutralCount > positiveCount) {
         return potSilver; // 부 > 중 > 긍 : 은방울꽃
+      } else if (negativeCount > positiveCount &&
+          positiveCount > neutralCount) {
+        return potHydran; // 부 > 긍 > 중 : 수국꽃
       } else {
         return step_3;
       }

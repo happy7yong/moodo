@@ -1,16 +1,7 @@
 # moodo
+이 프로젝트는 일기를 분석하고 일기에 따른 감정에 따라 꽃이 피는 일기장 앱입니다. 
+<br>
 
-A new Flutter project.
+flutter 사용하였습니다.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.

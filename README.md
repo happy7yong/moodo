@@ -4,6 +4,12 @@
 
 flutter 사용하였습니다.
 
+![1](https://github.com/user-attachments/assets/ccc3de1c-1467-4376-9262-fabe45f09475)
+![2](https://github.com/user-attachments/assets/51352c1e-5e54-429b-be0f-98f8e335f646)
+![3](https://github.com/user-attachments/assets/ce81717d-6a26-4d01-bd6b-8b63a943342e)
+![4](https://github.com/user-attachments/assets/d3b9e328-2314-476c-be68-878c24344bc1)
+![5](https://github.com/user-attachments/assets/a484ab55-18c6-4e1c-bb7b-fe74f54c99d5)
+![6](https://github.com/user-attachments/assets/82db658e-eb11-41f9-bda6-ebd58de94d41)
 ![7](https://github.com/user-attachments/assets/2216705d-0fad-4e38-84da-9e38b3e76e46)
 ![8](https://github.com/user-attachments/assets/7abed8e6-4da0-4e51-88f4-074ced06ba77)
 ![9](https://github.com/user-attachments/assets/6ea30e54-3f81-4c9b-83cd-6b9403e4c0c7)
@@ -21,9 +27,3 @@ flutter 사용하였습니다.
 ![21](https://github.com/user-attachments/assets/7ec3ef8b-ac7e-43bb-9de4-48c5fd4fe2c6)
 ![22](https://github.com/user-attachments/assets/622e9789-10a0-4306-964a-1b293d4156c0)
 ![23](https://github.com/user-attachments/assets/32b13e2b-022e-44f9-9887-d8271b50d070)
-![1](https://github.com/user-attachments/assets/ccc3de1c-1467-4376-9262-fabe45f09475)
-![2](https://github.com/user-attachments/assets/51352c1e-5e54-429b-be0f-98f8e335f646)
-![3](https://github.com/user-attachments/assets/ce81717d-6a26-4d01-bd6b-8b63a943342e)
-![4](https://github.com/user-attachments/assets/d3b9e328-2314-476c-be68-878c24344bc1)
-![5](https://github.com/user-attachments/assets/a484ab55-18c6-4e1c-bb7b-fe74f54c99d5)
-![6](https://github.com/user-attachments/assets/82db658e-eb11-41f9-bda6-ebd58de94d41)

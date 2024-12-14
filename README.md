@@ -2,7 +2,8 @@
 이 프로젝트는 일기를 분석하고 일기에 따른 감정에 따라 꽃이 피는 일기장 앱입니다. 
 <br>
 
-flutter 사용하였습니다.
+Use stack : flutter 사용하였습니다.
+개인프로젝트로 개발하였습니다
 
 ![1](https://github.com/user-attachments/assets/ccc3de1c-1467-4376-9262-fabe45f09475)
 ![2](https://github.com/user-attachments/assets/51352c1e-5e54-429b-be0f-98f8e335f646)

@@ -69,7 +69,7 @@ class _MoodSelectorState extends State<MoodSelector> {
                     onTap: () async {
                       await FirebaseFirestore.instance
                           .collection('Diary')
-                          .doc(widget.currentDocId) // 전달된 문서 ID 사용
+                          .doc(widget.currentDocId)
                           .update({'mood': 'neutral'});
                       widget.onMoodSelected('neutral');
                     },
